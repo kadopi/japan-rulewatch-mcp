@@ -6,6 +6,11 @@ import { DATASET_UPDATED_AT, getEvidencePack, RULES, searchRules } from "./rules
 const DISCLAIMER =
   "Informational evidence only. This service does not provide legal advice or determine legal compliance. Verify the current official source before acting.";
 
+const GLAMA_CONNECTOR_CLAIM = {
+  $schema: "https://glama.ai/mcp/schemas/connector.json",
+  claim: "glama_claim_U906vwxFl_Nm5Z_JWl8pVoyM5XdPeBpo"
+};
+
 function textResult(value: unknown) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(value, null, 2) }]
@@ -107,6 +112,10 @@ export default {
         datasetUpdatedAt: DATASET_UPDATED_AT,
         disclaimer: DISCLAIMER
       });
+    }
+
+    if (url.pathname === "/.well-known/glama.json" && request.method === "GET") {
+      return Response.json(GLAMA_CONNECTOR_CLAIM);
     }
 
     if (url.pathname === "/mcp") {
