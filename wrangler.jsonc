@@ -10,7 +10,7 @@
     "X402_AMOUNT": "10000",
     "X402_PRICE_USD": "0.01",
     "X402_FACILITATOR_URL": "https://x402.org/facilitator",
-    "X402_PAY_TO": "REPLACE_WITH_YOUR_TESTNET_RECEIVING_ADDRESS"
+    "X402_PAY_TO": "0x5dc8c4a19ffd5dee720c3321a307d2a948d55656"
   },
   "d1_databases": [
     {
