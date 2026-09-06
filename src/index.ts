@@ -1,7 +1,12 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { createMcpHandler } from "agents/mcp/server";
+import { HTTPFacilitatorClient, x402ResourceServer } from "@x402/core/server";
+import { registerExactEvmScheme } from "@x402/evm/exact/server";
 import { z } from "zod";
 import { DATASET_UPDATED_AT, getEvidencePack, RULES, searchRules } from "./rules";
+import { paymentConfig } from "./config";
+import { createPaidToolHandler } from "./paid-tool";
+import { buildTourismEvidencePack, buildTourismPreflight } from "./tourism";
 
 const DISCLAIMER =
   "Informational evidence only. This service does not provide legal advice or determine legal compliance. Verify the current official source before acting.";
@@ -17,11 +22,25 @@ function textResult(value: unknown) {
   };
 }
 
-function createServer() {
+const TOURISM_INPUT_SCHEMA = z.object({
+  acceptsReservationOnPlatform: z.boolean().optional(),
+  collectsTravelPayment: z.boolean().optional(),
+  handlesCancellationOrRefund: z.boolean().optional(),
+  actsAsContractingParty: z.boolean().optional()
+});
+
+function createServer(env: Env) {
+  const config = paymentConfig(env);
   const server = new McpServer({
     name: "Japan RuleWatch",
-    version: "0.0.1"
+    version: "0.1.0"
   });
+  const resourceServer = new x402ResourceServer(
+    new HTTPFacilitatorClient({ url: config.facilitatorUrl })
+  );
+  registerExactEvmScheme(resourceServer);
+  let initialized: Promise<void> | undefined;
+  const initialize = () => (initialized ??= resourceServer.initialize());
 
   server.registerTool(
     "search_rules",
@@ -86,29 +105,72 @@ function createServer() {
     }
   );
 
+  server.registerTool(
+    "get_tourism_preflight",
+    {
+      description:
+        "Free: classify a Japan-bound hotel service flow into the supported A/B/C model, list missing facts, and flag manual review. It does not return primary-source evidence.",
+      inputSchema: TOURISM_INPUT_SCHEMA
+    },
+    async (input) => textResult(buildTourismPreflight(input))
+  );
+
+  const paidEvidencePack = createPaidToolHandler({
+    toolName: "get_tourism_evidence_pack",
+    resource: {
+      url: "x402://get_tourism_evidence_pack",
+      description: "Get a Japan tourism primary-source and screen-check evidence pack"
+    },
+    env,
+    config,
+    resourceServer,
+    initialize,
+    execute: (input) => buildTourismEvidencePack(input)
+  });
+
+  server.registerTool(
+    "get_tourism_evidence_pack",
+    {
+      description:
+        "Paid: return official Japanese primary-source URLs, evidence locations, checked dates, source versions, general requirements, traveler-screen checks, and re-check triggers for a complete supported A/B/C flow. This is informational evidence, not a legal verdict.",
+      inputSchema: TOURISM_INPUT_SCHEMA
+    },
+    async (input, extra) => {
+      const pack = buildTourismEvidencePack(input);
+      if (pack.status !== "ready") {
+        return textResult({
+          error: "INPUT_INCOMPLETE_OR_REVIEW_REQUIRED",
+          preflight: buildTourismPreflight(input),
+          paymentRequired: false
+        });
+      }
+      return paidEvidencePack(input, extra);
+    }
+  );
+
   return server;
 }
 
-const mcpHandler = createMcpHandler(createServer, {
-  route: "/mcp",
-  legacy: "stateless"
-});
-
 export default {
-  async fetch(request, env, ctx): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     if (url.pathname === "/health" && request.method === "GET") {
-      return Response.json({ status: "ok", version: "0.0.1" });
+      return Response.json({ status: "ok", version: "0.1.0" });
     }
 
     if (url.pathname === "/" && request.method === "GET") {
       return Response.json({
         name: "Japan RuleWatch",
-        version: "0.0.1",
+        version: "0.1.0",
         mcp: "/mcp",
-        topic: "Japanese mail-order sales advertising",
-        tools: ["search_rules", "get_evidence_pack"],
+        topic: "Japanese mail-order sales advertising and tourism information",
+        tools: [
+          "search_rules",
+          "get_evidence_pack",
+          "get_tourism_preflight",
+          "get_tourism_evidence_pack"
+        ],
         datasetUpdatedAt: DATASET_UPDATED_AT,
         disclaimer: DISCLAIMER
       });
@@ -119,9 +181,12 @@ export default {
     }
 
     if (url.pathname === "/mcp") {
-      return mcpHandler(request, env, ctx);
+      return createMcpHandler(() => createServer(env), {
+        route: "/mcp",
+        legacy: "stateless"
+      })(request, env, ctx);
     }
 
     return Response.json({ error: "NOT_FOUND" }, { status: 404 });
   }
-} satisfies ExportedHandler;
+} satisfies ExportedHandler<Env>;
