@@ -7,6 +7,14 @@ import { DATASET_UPDATED_AT, getEvidencePack, RULES, searchRules } from "./rules
 import { paymentConfig } from "./config";
 import { createPaidToolHandler } from "./paid-tool";
 import { buildTourismEvidencePack, buildTourismPreflight } from "./tourism";
+import {
+  entryPackInputError,
+  getEntryPack,
+  PRIVATE_OPERATOR_NOTICE,
+  searchEntryCases,
+  type EntryPackInput
+} from "./entry-pack";
+import { ENTRY_PACK_PURCHASE_TERMS } from "./product-terms";
 
 const DISCLAIMER =
   "Informational evidence only. This service does not provide legal advice or determine legal compliance. Verify the current official source before acting.";
@@ -27,6 +35,11 @@ const TOURISM_INPUT_SCHEMA = z.object({
   collectsTravelPayment: z.boolean().optional(),
   handlesCancellationOrRefund: z.boolean().optional(),
   actsAsContractingParty: z.boolean().optional()
+});
+
+const ENTRY_PACK_INPUT_SCHEMA = z.object({
+  pack_id: z.string().trim().min(1).max(100),
+  language: z.string().trim().min(2).max(10)
 });
 
 function createServer(env: Env) {
@@ -64,6 +77,63 @@ function createServer(env: Env) {
         datasetUpdatedAt: DATASET_UPDATED_AT,
         disclaimer: DISCLAIMER
       })
+  );
+
+  server.registerTool(
+    "search_entry_cases",
+    {
+      description:
+        "Free: search the fixed Japan tourism entry-case catalog by region, activity, and language. Returns scope and unknowns before purchase. Japan Rule is a private commercial service, not a government service.",
+      inputSchema: {
+        region_id: z.string().trim().min(1).max(100),
+        activity: z.string().trim().min(1).max(100),
+        language: z.string().trim().min(2).max(10)
+      }
+    },
+    async (input) => textResult(searchEntryCases(input))
+  );
+
+  const paidEntryPack = createPaidToolHandler<EntryPackInput>({
+    toolName: "get_entry_pack",
+    resource: {
+      url: "x402://get_entry_pack",
+      description:
+        "Get the fixed Iya soba entry-preparation pack from Japan Rule, a private commercial information service",
+      purchaseTerms: ENTRY_PACK_PURCHASE_TERMS
+    },
+    env,
+    config,
+    resourceServer,
+    initialize,
+    execute: (input) => getEntryPack(input)!
+  });
+
+  server.registerTool(
+    "get_entry_pack",
+    {
+      description:
+        "Paid: return the fixed Iya soba entry-preparation pack with sources, contacts, consultation text, unknowns, and next actions. It gives no customer-specific legal verdict. Japan Rule is not a government service.",
+      inputSchema: ENTRY_PACK_INPUT_SCHEMA
+    },
+    async (input, extra) => {
+      const error = entryPackInputError(input);
+      if (error) {
+        return {
+          isError: true,
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify({
+                error,
+                paymentRequired: false,
+                operator_disclosure: PRIVATE_OPERATOR_NOTICE
+              })
+            }
+          ]
+        };
+      }
+      return paidEntryPack(input, extra);
+    }
   );
 
   server.registerTool(
@@ -169,10 +239,13 @@ export default {
           "search_rules",
           "get_evidence_pack",
           "get_tourism_preflight",
-          "get_tourism_evidence_pack"
+          "get_tourism_evidence_pack",
+          "search_entry_cases",
+          "get_entry_pack"
         ],
         datasetUpdatedAt: DATASET_UPDATED_AT,
-        disclaimer: DISCLAIMER
+        disclaimer: DISCLAIMER,
+        operator_disclosure: PRIVATE_OPERATOR_NOTICE
       });
     }
 

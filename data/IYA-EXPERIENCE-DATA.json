@@ -1,0 +1,174 @@
+{
+  "schema_version": "0.2",
+  "operator_disclosure": {
+    "operator_type": "private_commercial",
+    "government_operated": false,
+    "notice_ja": "Japan Ruleは、民間が営利目的で運営する独立した情報サービスです。国・自治体の公式サービスではありません。公式資料の引用・リンクは、行政機関との提携や公認を意味しません。利用料金は当サービスの情報提供の対価であり、行政手続きの申請料・許可手数料ではありません。",
+    "notice_en": "Japan Rule is an independent, privately operated commercial information service. It is not operated by a government or municipality. Links to official sources do not imply government affiliation or endorsement. Fees are for Japan Rule's information service, not government application or permit fees."
+  },
+  "content_version": "2026-09-08.2",
+  "pack_id": "jp-tokushima-miyoshi-iya-soba",
+  "status": "sample_complete",
+  "region": {
+    "region_id": "jp-tokushima-miyoshi-iya",
+    "country": "JP",
+    "prefecture": "徳島県",
+    "municipality": "三好市",
+    "area": "祖谷"
+  },
+  "activity": "food_culture_workshop",
+  "cases": [
+    {
+      "case_id": "iya-tsuzuki-soba",
+      "title_ja": "つづき商店・古式そば打ち体験",
+      "summary_en": "The prefectural tourism site describes grinding, making and eating soba at Tsuzuki Shoten in Higashi-Iya.",
+      "record_type": "existing_experience",
+      "new_business_entry_history": "unknown",
+      "partnership_availability": "unknown",
+      "source_ids": ["src-case"]
+    }
+  ],
+  "plan_facts": {
+    "contracting_party": null,
+    "venue": "existing local provider premises, subject to agreement",
+    "food_provider": "local provider proposed, not agreed",
+    "transport_arranged": false,
+    "lodging_arranged": false,
+    "participants": 6
+  },
+  "checks": [
+    {
+      "id": "travel-arrangements",
+      "jurisdiction_level": "national",
+      "question_en": "Who contracts with guests, takes payment and earns commission? Confirm the relevant route even though this sample excludes arranged transport and accommodation.",
+      "source_ids": ["src-travel"],
+      "contact_ids": ["travel-authority"],
+      "applicability": "not_determined",
+      "kind": "consultation_question"
+    },
+    {
+      "id": "food-service",
+      "jurisdiction_level": "national_and_prefectural",
+      "summary_en": "Miyoshi guidance describes licensing for relevant food businesses and consultation with the health center for the premises.",
+      "question_en": "Does the provider's existing permission cover participant cooking, on-site eating and any take-home food under this plan? Who is responsible for hygiene?",
+      "source_ids": ["src-food"],
+      "contact_ids": ["food-authority", "provider"],
+      "applicability": "not_determined",
+      "kind": "consultation_question"
+    },
+    {
+      "id": "venue-consent",
+      "question_en": "Will the operator accept six-person commercial group bookings, overseas resale, an interpreter and the proposed kitchen use? Obtain agreement on responsibility, cancellations and permitted marketing.",
+      "source_ids": ["src-case"],
+      "contact_ids": ["provider"],
+      "status": "provider_confirmation_required",
+      "kind": "editorial_question",
+      "evidence_limit": "The listing confirms a public experience, not these commercial terms."
+    },
+    {
+      "id": "water",
+      "question_en": "What water source is used? If non-mains water is used, ask the health center about its published water-testing guidance.",
+      "source_ids": ["src-food"],
+      "contact_ids": ["food-authority", "provider"],
+      "applicability": "not_determined",
+      "kind": "consultation_question"
+    }
+  ],
+  "contacts": [
+    {
+      "contact_id": "provider",
+      "name": "Tsuzuki Shoten",
+      "role": "Potential venue/provider enquiry, not a confirmed partner",
+      "phone": "0883-88-5625",
+      "source_ids": ["src-case"],
+      "verification": "web_listing_only"
+    },
+    {
+      "contact_id": "food-authority",
+      "name": "Miyoshi Public Health Center",
+      "role": "Food hygiene consultation for the proposed venue and operation",
+      "url": "https://www.pref.tokushima.lg.jp/5015222/5015230/7313038",
+      "source_ids": ["src-food"],
+      "verification": "official_web_route"
+    },
+    {
+      "contact_id": "travel-authority",
+      "name": "Tokushima Prefecture travel-business enquiry",
+      "role": "Confirm competent authority based on contracting and business location",
+      "url": "https://www.pref.tokushima.lg.jp/FAQ/docs/00014342/",
+      "source_ids": ["src-travel-contact"],
+      "verification": "official_web_route"
+    }
+  ],
+  "missing_information": [
+    "contracting_party",
+    "venue_agreement",
+    "provider_agreement",
+    "existing_food_permission_scope",
+    "language_support",
+    "water_source"
+  ],
+  "coverage_gaps": [
+    "individual legal applicability",
+    "commercial partnership terms",
+    "live availability"
+  ],
+  "sources": [
+    {
+      "source_id": "src-case",
+      "url": "https://www.awanavi.jp/archives/spot/1990",
+      "publisher": "徳島県・徳島県観光協会",
+      "locator": "体験紹介・お問い合わせ・所在地",
+      "language": "ja",
+      "checked_at": "2026-09-08",
+      "review_method": "page_read",
+      "published_at": null
+    },
+    {
+      "source_id": "src-travel",
+      "url": "https://www.mlit.go.jp/kankocho/seisaku_seido/ryokogyoho/ryokogyohogaiyo.html",
+      "publisher": "観光庁",
+      "locator": "旅行業法概要",
+      "language": "ja",
+      "checked_at": "2026-09-08",
+      "review_method": "page_read",
+      "published_at": null
+    },
+    {
+      "source_id": "src-food",
+      "url": "https://www.pref.tokushima.lg.jp/5015222/5015230/7313038",
+      "publisher": "三好保健所",
+      "locator": "食品営業許可を取得する・飲料水の水質検査",
+      "language": "ja",
+      "checked_at": "2026-09-08",
+      "review_method": "page_read",
+      "published_at": null
+    },
+    {
+      "source_id": "src-travel-contact",
+      "url": "https://www.pref.tokushima.lg.jp/FAQ/docs/00014342/",
+      "publisher": "徳島県",
+      "locator": "旅行業の手続・問い合わせ",
+      "language": "ja",
+      "checked_at": "2026-09-08",
+      "review_method": "page_read",
+      "published_at": null
+    }
+  ],
+  "completion_scope": "Source-backed consultation preparation sample; not operational or legal approval.",
+  "scenario_type": "fictional_proposal",
+  "excluded": [
+    "cost estimates",
+    "booking execution",
+    "permit application",
+    "new venue or construction",
+    "transport or lodging operation"
+  ],
+  "next_actions": [
+    "Confirm provider interest and venue terms.",
+    "Document seller, provider, payment and food-handling roles.",
+    "Consult listed authorities using the role outline.",
+    "Reassess if transport, lodging, venue or food handling changes."
+  ],
+  "consultation_brief_en": "We are exploring a six-person soba workshop at an existing local provider's venue. No transport or accommodation is arranged. Seller and payment roles are not yet agreed. Please confirm whether the proposed cooking, eating and any take-home food are covered by the venue's arrangements, what further checks are needed, and who should handle them."
+}

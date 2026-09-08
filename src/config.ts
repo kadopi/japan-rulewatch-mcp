@@ -17,12 +17,15 @@ export function paymentConfig(env: Env): PaymentConfig {
   const amount = String(env.X402_AMOUNT ?? "");
   const recipient = String(env.X402_PAY_TO ?? "");
   const facilitatorUrl = String(env.X402_FACILITATOR_URL ?? "");
-  const priceUsd = Number(env.X402_PRICE_USD ?? "");
+  const configuredPrice = network === "eip155:84532"
+    ? env.X402_TEST_PRICE_USD ?? env.X402_PRICE_USD
+    : env.X402_SALE_PRICE_USD;
+  const priceUsd = Number(configuredPrice ?? "");
   const expectedAsset = network === "eip155:84532" ? BASE_SEPOLIA_USDC : BASE_USDC;
   const expectedAmount = Number.isFinite(priceUsd) ? String(Math.round(priceUsd * 1_000_000)) : "";
   if (asset.toLowerCase() !== expectedAsset.toLowerCase() || !/^[1-9][0-9]*$/.test(amount) || amount !== expectedAmount ||
       !/^0x[a-fA-F0-9]{40}$/.test(recipient) || !Number.isFinite(priceUsd) || priceUsd <= 0) {
-    throw new Error("payment_not_configured: Base USDC, positive atomic amount, price, and recipient are required");
+    throw new Error("payment_not_configured: Base USDC, positive atomic amount, environment-specific price, and recipient are required");
   }
   try { new URL(facilitatorUrl); } catch { throw new Error("payment_not_configured: invalid facilitator URL"); }
   return { network, asset, amount, priceUsd, recipient: recipient as `0x${string}`, facilitatorUrl };

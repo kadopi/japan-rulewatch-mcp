@@ -1,7 +1,6 @@
 import { paymentConfig } from "./config";
 import { claimPurchase, getPurchase, saveDeliveryFailure, saveSettled, type Purchase } from "./ledger";
-
-const RESULT_TTL_DAYS = 7;
+import { PAID_RESULT_TTL_DAYS } from "./product-terms";
 
 type ResourceServer = {
   buildPaymentRequirements(input: unknown): Promise<unknown>;
@@ -12,7 +11,7 @@ type ResourceServer = {
 
 export interface PaidToolOptions<TArgs extends Record<string, unknown>> {
   toolName: string;
-  resource: { url: string; description: string };
+  resource: { url: string; description: string; purchaseTerms?: Record<string, unknown> };
   env: Env;
   config: ReturnType<typeof paymentConfig>;
   resourceServer: ResourceServer;
@@ -44,7 +43,7 @@ export function createPaidToolHandler<TArgs extends Record<string, unknown>>(opt
     const claimed = await claimPurchase(options.env.DB, {
       purchase_id: crypto.randomUUID(), payment_fingerprint: fingerprint, payer: verification.payer ?? null,
       tool_name: options.toolName, input_hash: inputHash, network: options.config.network, asset: options.config.asset, amount: options.config.amount,
-      created_at: now.toISOString(), updated_at: now.toISOString(), expires_at: new Date(now.getTime() + RESULT_TTL_DAYS * 86_400_000).toISOString(),
+      created_at: now.toISOString(), updated_at: now.toISOString(), expires_at: new Date(now.getTime() + PAID_RESULT_TTL_DAYS * 86_400_000).toISOString(),
     });
     if (!claimed.created) return existingPurchaseResponse(claimed.purchase, inputHash, options.toolName, options.config);
 
@@ -72,7 +71,7 @@ export function existingPurchaseResponse(purchase: Purchase, inputHash: string, 
   return pendingReceipt(purchase.purchase_id);
 }
 
-function paymentRequired(accepts: unknown, resource: PaidToolOptions<Record<string, unknown>>["resource"], reason = "PAYMENT_REQUIRED") { return { isError: true, _meta: { "x402/error": { x402Version: 2, error: reason, resource: { ...resource, mimeType: "application/json" }, accepts } }, content: [{ type: "text" as const, text: JSON.stringify({ error: reason, accepts }) }] }; }
+function paymentRequired(accepts: unknown, resource: PaidToolOptions<Record<string, unknown>>["resource"], reason = "PAYMENT_REQUIRED") { return { isError: true, _meta: { "x402/error": { x402Version: 2, error: reason, resource: { ...resource, mimeType: "application/json" }, accepts } }, content: [{ type: "text" as const, text: JSON.stringify({ error: reason, resource, accepts }) }] }; }
 function pendingReceipt(purchaseId: string) { return error("payment_confirmation_pending", "Settlement outcome is unknown. Retry only with the same payment proof; do not create a new payment.", { purchaseId }); }
 function result(value: unknown, meta?: Record<string, unknown>) { return { content: [{ type: "text" as const, text: JSON.stringify(value) }], structuredContent: value as Record<string, unknown>, ...(meta ? { _meta: meta } : {}) }; }
 function error(code: string, message: string, details?: unknown) { const value = { error: code, message, ...(details && typeof details === "object" ? details : {}) }; return { isError: true, content: [{ type: "text" as const, text: JSON.stringify(value) }], structuredContent: value }; }

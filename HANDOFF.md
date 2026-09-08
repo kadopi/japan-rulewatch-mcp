@@ -1,0 +1,31 @@
+# Japan RuleWatch latest handoff
+
+- Current state: local implementation complete; no deployment performed.
+- Repository: `japan-rulewatch-mcp-public` on branch `main`.
+- Last existing commit before this work: `3fa9b86`.
+- Uncommitted scope: one fixed Iya soba entry product.
+- Free tool added: `search_entry_cases(region_id, activity, language)`.
+- Paid tool added: `get_entry_pack(pack_id, language)`.
+- Supported region: `jp-tokushima-miyoshi-iya`.
+- Supported activity: `food_culture_workshop`.
+- Supported language: `en`.
+- Pack ID: `jp-tokushima-miyoshi-iya-soba`.
+- Content version: `2026-09-08.2`.
+- Canonical data: `data/IYA-EXPERIENCE-DATA.json`.
+- Free result includes scope, unknowns, assumed fictional plan, and operator disclosure.
+- Paid result returns the complete fixed JSON with source and contact references.
+- Paid result adds an explicit notice that `plan_facts` is fictional sample data.
+- Operator: private commercial service; not a government or municipal service.
+- Official links do not imply affiliation or endorsement.
+- Approved provisional sale price: 5 USDC per single purchase.
+- Test price: 0.01 USDC on Base Sepolia, configured separately.
+- Saved-result retrieval window: seven days from the existing x402 Starter.
+- Free replay scope: same proof, tool, normalized input, price condition, and saved version.
+- Future content versions and indefinite storage are not included.
+- Existing x402 verify, settle, ledger, saved result, and replay logic is reused.
+- Unknown pack IDs and unsupported languages stop before payment.
+- Confirmed: TypeScript check passes.
+- Confirmed: 21 local tests pass, including mock payment and replay controls.
+- Safety boundary: no customer-specific legal conclusion or generated legal text.
+- Not performed: deployment, publication, real payment, external communication, commit, or push.
+- Remaining decisions: Mainnet deployment approval, real-payment approval, commercial legal review, measured demand.

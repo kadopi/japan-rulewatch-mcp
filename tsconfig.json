@@ -5,6 +5,7 @@
     "moduleResolution": "Bundler",
     "lib": ["ES2024", "WebWorker"],
     "types": ["@cloudflare/workers-types"],
+    "resolveJsonModule": true,
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true

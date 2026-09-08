@@ -7,7 +7,7 @@ const config = paymentConfig({
   X402_NETWORK: "eip155:84532",
   X402_ASSET: paymentDefaults.baseSepoliaUsdc,
   X402_AMOUNT: "10000",
-  X402_PRICE_USD: "0.01",
+  X402_TEST_PRICE_USD: "0.01",
   X402_PAY_TO: "0x1111111111111111111111111111111111111111",
   X402_FACILITATOR_URL: "https://x402.org/facilitator"
 } as Env);
@@ -23,6 +23,25 @@ const purchase: Purchase = {
 
 describe("tourism payment configuration", () => {
   it("accepts the Base Sepolia USDC tuple", () => expect(config.network).toBe("eip155:84532"));
+  it("requires a separately configured sale price for Mainnet", () =>
+    expect(() => paymentConfig({
+      ...config,
+      X402_NETWORK: "eip155:8453",
+      X402_ASSET: paymentDefaults.baseUsdc,
+      X402_AMOUNT: "25000000",
+      X402_TEST_PRICE_USD: "0.01",
+      X402_PRICE_USD: undefined
+    } as unknown as Env)).toThrow("payment_not_configured"));
+  it("accepts the approved 5 USDC sale price only from the Mainnet sale-price setting", () =>
+    expect(paymentConfig({
+      X402_NETWORK: "eip155:8453",
+      X402_ASSET: paymentDefaults.baseUsdc,
+      X402_AMOUNT: "5000000",
+      X402_TEST_PRICE_USD: "0.01",
+      X402_SALE_PRICE_USD: "5",
+      X402_PAY_TO: "0x1111111111111111111111111111111111111111",
+      X402_FACILITATOR_URL: "https://x402.org/facilitator"
+    } as unknown as Env).priceUsd).toBe(5));
   it("rejects an asset that does not match the selected network", () =>
     expect(() => paymentConfig({ ...config, X402_ASSET: paymentDefaults.baseUsdc } as unknown as Env)).toThrow("payment_not_configured"));
 });

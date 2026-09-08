@@ -2,11 +2,13 @@
 
 Read-only Remote MCP for official Japanese rule evidence. The tourism pack targets overseas OTA and travel-tech teams implementing Japan-bound hotel flows.
 
-It exposes four tools over stateless Streamable HTTP:
+It exposes the existing evidence tools plus one fixed tourism-entry product over stateless Streamable HTTP:
 
 - `search_rules` and `get_evidence_pack`: free ecommerce evidence lookup.
 - `get_tourism_preflight`: free A/B/C service-flow classification, missing facts, and manual-review triggers.
 - `get_tourism_evidence_pack`: x402-paid tourism evidence pack for a complete supported A/B/C flow.
+- `search_entry_cases`: free search for the Iya soba experience sample and its known gaps.
+- `get_entry_pack`: paid retrieval of the fixed Iya soba entry-preparation pack.
 
 The paid pack returns official URLs, evidence locations, checked dates, source versions, general requirements, traveler-screen checks, and re-check triggers. It does not determine legal compliance, travel-business registration requirements, or legal risk for a particular service.
 
@@ -18,7 +20,9 @@ The paid pack returns official URLs, evidence locations, checked dates, source v
 
 Call `get_tourism_preflight` first with the four service-flow facts. Incomplete or unsupported facts remain free and return missing facts or a manual-review trigger. A complete supported flow can call `get_tourism_evidence_pack`; its x402 402 response is the authoritative payment requirement.
 
-The commercial hypothesis is 25 USDC per evidence pack. Base Sepolia uses 0.01 test USDC only for integration verification. Mainnet is not deployed or verified.
+The approved provisional price for `get_entry_pack` is 5 USDC per single purchase. The saved result can be retrieved for seven days with the same payment proof, tool, normalized input, price condition, and content version. Future versions and indefinite storage are not included. Base Sepolia uses 0.01 test USDC only for integration verification. `X402_TEST_PRICE_USD` and `X402_SALE_PRICE_USD` are separate settings. Mainnet is not deployed or verified.
+
+Japan Rule is an independent, privately operated commercial information service. It is not operated by a government or municipality. Official-source links do not imply affiliation or endorsement. The fee covers Japan Rule's information service, not a government application or permit fee.
 
 ## Example: find official sources for a Japanese ecommerce workflow
 
