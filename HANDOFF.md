@@ -1,8 +1,8 @@
 # Japan RuleWatch latest handoff
 
-- Current: Mainnet sale gate opened 2026-09-08; commercial draft v4 and purchase-confirmation gate are deployed. One operator-authorized 5-USDC Mainnet purchase settled successfully. The public README and MCP manifest now point to the verified Mainnet endpoint and describe the business purchase flow.
+- Current: Mainnet sale gate opened 2026-09-08; commercial draft v4 and purchase-confirmation gate are deployed. One operator-authorized 5-USDC Mainnet purchase settled successfully. Public README, MCP manifest, and Smithery listing point to the verified Mainnet endpoint and describe the free and paid paths.
 - Repo: japan-rulewatch-mcp-public, main. Latest local commit before this guide update: 1151b2d test: verify public buyer flow.
-- Git status: sales guide is committed and pushed. Smithery listing now points to the Mainnet endpoint; local handoff update is ready to commit.
+- Git status: sales guide is committed and pushed. Smithery listing points to the Mainnet endpoint; its public description now distinguishes free official-rule search/tourism preflight from the paid B2B entry-preparation pack.
 - Live: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp
 - Initial deployment: 8dd72965-b140-4ebb-b849-87f09b6d0a4e (before secret update); purchase-gate version: 4de5bfb1-dd82-4980-985e-90ad323dbd57; sale-ready version: c1b0ca99-1c68-419f-8b39-d272c5b04050.
 - Both CDP secret names verified after 1Password-to-stdin registration; no plaintext secret files.
@@ -33,13 +33,13 @@
 - Real payment test: purchase `63d014e7-67fb-474d-a554-bf13995e5d04` settled on Base Mainnet at transaction `0x3d2295cb5b88857fac6d53e18626750b38c74616970228dc8ae52d32a7ac276a`. The x402 client received delivery; Base receipt status was success and the native-USDC transfer was exactly 5,000,000 units from the test payer to the configured recipient; remote D1 row is `settled` with the same transaction reference.
 - Payer after settlement: 0.59 USDC; the 5-USDC requirement was paid once. No second payment is authorized. Same-proof retrieval was not re-run because the raw proof is intentionally not persisted.
 - Script: `scripts/pay-mainnet-entry-pack.mjs` is fixed to the verified payer, Base network, USDC asset, amount, recipient and product. It reads the 1Password key into memory only; normal mode is no-payment preflight and `--execute` sends one payment after requirements validation. It reports whether submission was attempted and verifies the settled response carries the expected pack ID.
-- Next: retain the tx/purchase ID with the annual accounting records; decide whether to add a non-secret test-receipt export. Sales activation and real payment approvals are complete.
+- Next: retain the tx/purchase ID with annual accounting records; begin buyer acquisition from the published Smithery listing. No code expansion or further payment test is needed.
 - Mainnet D1: b225aca0-3ac1-4fef-9968-d2275f84cf2b; migration 0001 applied 2026-09-08.
 - Recipient: 0x5dc8c4a19ffd5dee720c3321a307d2a948d55656; Base native USDC; separate Testnet price 0.01.
 - One real payment performed only under explicit approval; sales activation and current draft deployment completed under explicit approval.
-- Safety: no individual legal-compliance verdict; existing tourism paid pack stays unavailable on Mainnet.
+- Safety: no individual legal-compliance verdict; the paid tourism entry pack is business-only and requires buyer confirmation before its exact 5-USDC Base payment requirement is issued.
 - Known dependency audit: SDK transitive axios and existing Vitest reports; no blanket upgrades.
 - Execution gap closed: payer wallet and x402 signing client established. Obtain hash from get_entry_pack initial response (get_commercial_terms omits hash) for any future purchase.
 - Public buyer-flow check passed after the real payment: a no-key client discovered the paid tools, read ready commercial terms, received the business confirmation gate, then received only the exact Base-USDC 5-USDC requirement. `scripts/check-public-buyer-flow.mjs` performs this check without creating a payment.
 - Sales starter: `docs/SALES_STARTER.md` contains the current Japanese product guide, English directory copy, and first listing candidates (Smithery then Glama). It is not an external listing submission.
-- Smithery: existing `kadopi/japan-rulewatch` was republished with `https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp` on 2026-09-08. The public listing now scans seven tools, including `get_commercial_terms`, `search_entry_cases`, `get_entry_pack`, and `get_tourism_evidence_pack`.
+- Smithery: existing `kadopi/japan-rulewatch` was republished with `https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp` on 2026-09-08. The public listing now scans seven tools, including `get_commercial_terms`, `search_entry_cases`, `get_entry_pack`, and `get_tourism_evidence_pack`. Its public description now states the free search/preflight path and the 5-USDC Base Mainnet B2B entry-preparation path.
