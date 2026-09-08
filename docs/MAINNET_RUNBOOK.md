@@ -1,6 +1,6 @@
 # Mainnet release runbook
 
-Status: Mainnet Worker deployed and sale gate opened on 2026-09-08 under explicit approval. Nothing in this file authorizes a real payment.
+Status: Mainnet Worker deployed and sale gate opened on 2026-09-08 under explicit approval. The first operator-authorized 5-USDC payment settled successfully; this file does not authorize any further payment.
 
 ## CDP authentication setup
 
@@ -44,3 +44,12 @@ Fixed Mainnet payment settings:
 
 Stop conditions: recipient mismatch, shared Testnet/Mainnet D1, missing sale price,
 failed migration, failed tests, unexpected 402 amount, or unsettled reconciliation.
+
+## First real-payment evidence (2026-09-08)
+
+- Purchase ID: `63d014e7-67fb-474d-a554-bf13995e5d04`
+- Base transaction: `0x3d2295cb5b88857fac6d53e18626750b38c74616970228dc8ae52d32a7ac276a`
+- Base receipt: successful; native Base-USDC `Transfer` logged for exactly 5,000,000 atomic units to the configured recipient.
+- D1: the dedicated Mainnet database recorded the same purchase ID, payer, asset, amount, `settled` status, and transaction reference.
+- Delivery: received by the x402 client in the settled response.
+- The raw proof is not persisted; therefore same-proof retrieval was deliberately not re-run after this one payment.
