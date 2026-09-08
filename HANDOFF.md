@@ -40,3 +40,4 @@
 - Safety: no individual legal-compliance verdict; existing tourism paid pack stays unavailable on Mainnet.
 - Known dependency audit: SDK transitive axios and existing Vitest reports; no blanket upgrades.
 - Execution gap closed: payer wallet and x402 signing client established. Obtain hash from get_entry_pack initial response (get_commercial_terms omits hash) for any future purchase.
+- Public buyer-flow check passed after the real payment: a no-key client discovered the paid tools, read ready commercial terms, received the business confirmation gate, then received only the exact Base-USDC 5-USDC requirement. `scripts/check-public-buyer-flow.mjs` performs this check without creating a payment.
