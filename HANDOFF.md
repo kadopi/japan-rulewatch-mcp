@@ -1,9 +1,9 @@
 # Japan RuleWatch latest handoff
 
-- Current state: local implementation complete; no deployment performed.
+- Current state: local implementation committed; no deployment performed.
 - Repository: `japan-rulewatch-mcp-public` on branch `main`.
-- Last existing commit before this work: `3fa9b86`.
-- Uncommitted scope: one fixed Iya soba entry product.
+- Implementation commit: `70e685f feat: add paid Iya soba entry pack`.
+- Worktree after handoff update: no remaining implementation changes.
 - Free tool added: `search_entry_cases(region_id, activity, language)`.
 - Paid tool added: `get_entry_pack(pack_id, language)`.
 - Supported region: `jp-tokushima-miyoshi-iya`.
@@ -27,5 +27,5 @@
 - Confirmed: TypeScript check passes.
 - Confirmed: 21 local tests pass, including mock payment and replay controls.
 - Safety boundary: no customer-specific legal conclusion or generated legal text.
-- Not performed: deployment, publication, real payment, external communication, commit, or push.
+- Not performed: deployment, publication, real payment, external communication, or push.
 - Remaining decisions: Mainnet deployment approval, real-payment approval, commercial legal review, measured demand.
