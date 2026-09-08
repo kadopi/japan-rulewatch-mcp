@@ -10,13 +10,13 @@
     "X402_AMOUNT": "5000000",
     "X402_SALE_PRICE_USD": "5",
     "X402_FACILITATOR_URL": "https://api.cdp.coinbase.com/platform/v2/x402",
-    "X402_PAY_TO": "REPLACE_WITH_CONFIRMED_MAINNET_RECIPIENT"
+    "X402_PAY_TO": "0x5dc8c4a19ffd5dee720c3321a307d2a948d55656"
   },
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "japan-rulewatch-purchases-mainnet",
-      "database_id": "REPLACE_WITH_MAINNET_D1_DATABASE_ID"
+      "database_id": "b225aca0-3ac1-4fef-9968-d2275f84cf2b"
     }
   ],
   "observability": {

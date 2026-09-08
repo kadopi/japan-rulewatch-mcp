@@ -28,8 +28,13 @@
 - Confirmed: TypeScript check passes.
 - Confirmed: 21 local tests pass, including mock payment and replay controls.
 - Safety boundary: no customer-specific legal conclusion or generated legal text.
-- Confirmed blocker: Wrangler authentication expired in the non-interactive session.
-- Required inputs: dedicated Mainnet D1 ID and confirmed Mainnet recipient address.
-- Not performed: Mainnet deployment, real payment, or external communication.
+- Cloudflare login restored on 2026-09-08.
+- Mainnet D1 created in APAC: `b225aca0-3ac1-4fef-9968-d2275f84cf2b`.
+- Mainnet recipient confirmed: `0x5dc8c4a19ffd5dee720c3321a307d2a948d55656`.
+- Migration `0001_purchases.sql` applied to Mainnet D1 on 2026-09-08.
+- Remote schema confirmed: `purchases`, expiry index, and migration table.
+- Mainnet dry-run confirmed 5 USDC, Base USDC, CDP facilitator, and dedicated D1.
+- Latest verification: TypeScript and all 21 tests pass.
+- Not performed: Mainnet Worker deployment, real payment, or external communication.
 - Legal blockers: seller disclosure, pre-payment terms, refund process, counsel and tax confirmation.
 - Remaining gates: operator terms, qualified legal/tax review, Mainnet deployment approval, real-payment approval.
