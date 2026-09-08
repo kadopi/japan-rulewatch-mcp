@@ -2,7 +2,7 @@
 
 - Current: Mainnet sale gate opened 2026-09-08; commercial draft v4 and purchase-confirmation gate are deployed. One operator-authorized 5-USDC Mainnet purchase settled successfully. The public README and MCP manifest now point to the verified Mainnet endpoint and describe the business purchase flow.
 - Repo: japan-rulewatch-mcp-public, main. Latest local commit before this guide update: 1151b2d test: verify public buyer flow.
-- Git status: sales guide and listing candidates are being prepared locally; external directory publication remains a separate action.
+- Git status: sales guide is committed and pushed. Smithery listing now points to the Mainnet endpoint; local handoff update is ready to commit.
 - Live: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp
 - Initial deployment: 8dd72965-b140-4ebb-b849-87f09b6d0a4e (before secret update); purchase-gate version: 4de5bfb1-dd82-4980-985e-90ad323dbd57; sale-ready version: c1b0ca99-1c68-419f-8b39-d272c5b04050.
 - Both CDP secret names verified after 1Password-to-stdin registration; no plaintext secret files.
@@ -42,3 +42,4 @@
 - Execution gap closed: payer wallet and x402 signing client established. Obtain hash from get_entry_pack initial response (get_commercial_terms omits hash) for any future purchase.
 - Public buyer-flow check passed after the real payment: a no-key client discovered the paid tools, read ready commercial terms, received the business confirmation gate, then received only the exact Base-USDC 5-USDC requirement. `scripts/check-public-buyer-flow.mjs` performs this check without creating a payment.
 - Sales starter: `docs/SALES_STARTER.md` contains the current Japanese product guide, English directory copy, and first listing candidates (Smithery then Glama). It is not an external listing submission.
+- Smithery: existing `kadopi/japan-rulewatch` was republished with `https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp` on 2026-09-08. The public listing now scans seven tools, including `get_commercial_terms`, `search_entry_cases`, `get_entry_pack`, and `get_tourism_evidence_pack`.
