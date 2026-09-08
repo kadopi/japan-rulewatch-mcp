@@ -28,6 +28,10 @@ authorized business principal. It is not offered for household consumer use;
 submitting payment represents business use under the disclosed purchase terms.
 Until the product-specific commercial profile is `ready`, Mainnet paid delivery is
 blocked before a payment requirement is returned.
+Normal delivery and retrieval are automated. Unresolved purchase exceptions can
+be sent to the email in the purchase terms with a purchase ID and transaction
+reference, without private keys or raw payment proofs. No response deadline is
+promised. Refund terms remain a draft; this is not a blanket no-refund policy.
 
 Mainnet preparation is documented in `docs/MAINNET_RUNBOOK.md`. The checked-in
 `wrangler.mainnet.example.jsonc` is intentionally non-deployable until a dedicated

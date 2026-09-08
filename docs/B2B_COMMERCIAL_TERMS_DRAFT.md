@@ -35,7 +35,7 @@ Saved results can be retrieved with the same proof after settlement is recorded,
 including when the final receipt/result update failed but the transaction was saved.
 Unconfirmed settlement or missing saved delivery requires support with the purchase ID and transaction reference;
 do not pay again or send raw payment proofs to support. A seven-day waiting
-period is not required. Support remedy and response target remain unconfirmed.
+period is not required. Refund/remedy policy remains unconfirmed.
 
 ## 5. Operator and support
 
@@ -43,7 +43,9 @@ period is not required. Support remedy and response target remain unconfirmed.
 - Business address: 〒790-0012 愛媛県松山市湊町４丁目５－６プログレッソ松山
 - Responsible person: 門屋哲朗
 - Support email: kadoya@nuko-factory.com
-- Support response target: `[OPERATOR TO CONFIRM, recommended: 5 business days]`
+- Normal delivery and retrieval are automated; email is for unresolved purchase exceptions only.
+- No response deadline or response-time SLA is promised.
+- Include the purchase ID and transaction reference if available; never send private keys or raw payment proofs.
 
 ## 6. Governing terms
 
@@ -60,8 +62,8 @@ operator approval.
 
 ## Decisions required from the operator
 
-1. Confirm contracting seller identity (trade name/person/entity) and approve publication of the supplied details.
+1. Confirm contracting seller identity (trade name/person/entity). Publication of the supplied details is approved.
 2. Whether the recommended delivery-failure remedy is accepted.
-3. Support response target.
+3. Support policy is confirmed: automated normal operation, exception email, no promised response deadline.
 4. Governing law and forum after legal advice.
 5. Tax treatment and accounting process for USDC receipts.

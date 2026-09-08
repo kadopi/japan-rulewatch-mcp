@@ -14,6 +14,7 @@ type CommercialTerms = {
   delivery_failure: { automatic_recovery: boolean; remedy: string };
   operator_details: string;
   support_channel: string;
+  support: typeof purchaseTerms.support;
   governing_law_and_forum: string;
   data_handling: string;
 };
@@ -35,7 +36,8 @@ export const ENTRY_PACK_COMMERCIAL_TERMS: CommercialTerms = {
     remedy: "prepared delivery can be retrieved after settlement is recorded; unconfirmed settlement or missing delivery requires operator support; no automatic on-chain refund"
   },
   operator_details: "pending",
-  support_channel: "pending",
+  support_channel: purchaseTerms.support.email,
+  support: purchaseTerms.support,
   governing_law_and_forum: "pending legal review",
   data_handling: "payment ledger stores settlement and delivery state, never private keys or raw payment proofs"
 };

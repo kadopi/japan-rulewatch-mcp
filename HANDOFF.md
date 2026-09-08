@@ -1,10 +1,9 @@
 # Japan RuleWatch latest handoff
 
-- Current state: delivery preparation and replay fixes complete; commit/push approved.
+- Current state: delivery fixes and approved minimal support policy complete; Mainnet sale pending.
 - Repository: `japan-rulewatch-mcp-public` on branch `main`.
-- Previous commit: `75be220`; this change prepares delivery before settlement.
+- Previous commit: `839b90d`; this change records the approved exception-email support policy.
 - Mainnet config contains confirmed D1 and recipient; paid tool gate prevents new sales.
-- Commercial legal desk review added; it is not a lawyer's opinion.
 - Free tool added: `search_entry_cases(region_id, activity, language)`.
 - Paid tool added: `get_entry_pack(pack_id, language)`.
 - Supported: `jp-tokushima-miyoshi-iya` / `food_culture_workshop` / `en`.
@@ -35,6 +34,7 @@
 - Mainnet dry-run confirmed 5 USDC, Base USDC, CDP facilitator, and dedicated D1.
 - Shared purchase fields now drive the commercial profile; pending fields block readiness.
 - Full terms snapshot/hash binding and live CDP verification remain unimplemented/unverified.
-- Not performed: Mainnet Worker deployment, real payment, or external communication.
-- Pending: support target, remedy, law/forum, tax treatment, counsel confirmation.
+- Not performed: Mainnet Worker deployment or real payment; coordinator progress report sent.
+- Support confirmed: automated normal operation; existing email for exceptions; no reply deadline.
+- Pending: remedy/refund policy, law/forum, tax treatment, counsel confirmation.
 - Remaining gates: operator terms, qualified legal/tax review, Mainnet deployment approval, real-payment approval.
