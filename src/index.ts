@@ -15,6 +15,7 @@ import {
   type EntryPackInput
 } from "./entry-pack";
 import { ENTRY_PACK_PURCHASE_TERMS } from "./product-terms";
+import { commercialTermsFor, commercialTermsReady } from "./commercial-terms";
 
 const DISCLAIMER =
   "Informational evidence only. This service does not provide legal advice or determine legal compliance. Verify the current official source before acting.";
@@ -80,6 +81,21 @@ function createServer(env: Env) {
   );
 
   server.registerTool(
+    "get_commercial_terms",
+    {
+      description:
+        "Free: return the current business-only commercial terms profile for a supported paid product. A status other than ready means Mainnet purchase is unavailable.",
+      inputSchema: { product_id: z.string().trim().min(1).max(100) }
+    },
+    async ({ product_id }) => {
+      const terms = commercialTermsFor(product_id);
+      return terms
+        ? textResult(terms)
+        : { isError: true, content: [{ type: "text" as const, text: JSON.stringify({ error: "PRODUCT_NOT_FOUND" }) }] };
+    }
+  );
+
+  server.registerTool(
     "search_entry_cases",
     {
       description:
@@ -130,6 +146,19 @@ function createServer(env: Env) {
               })
             }
           ]
+        };
+      }
+      if (config.network === "eip155:8453" && !commercialTermsReady()) {
+        return {
+          isError: true,
+          content: [{
+            type: "text" as const,
+            text: JSON.stringify({
+              error: "COMMERCIAL_TERMS_NOT_READY",
+              paymentRequired: false,
+              terms: commercialTermsFor(input.pack_id)
+            })
+          }]
         };
       }
       return paidEntryPack(input, extra);
@@ -214,6 +243,9 @@ function createServer(env: Env) {
           paymentRequired: false
         });
       }
+      if (config.network === "eip155:8453") {
+        return textResult({ error: "PRODUCT_NOT_RELEASED_ON_MAINNET", paymentRequired: false });
+      }
       return paidEvidencePack(input, extra);
     }
   );
@@ -240,6 +272,7 @@ export default {
           "get_evidence_pack",
           "get_tourism_preflight",
           "get_tourism_evidence_pack",
+          "get_commercial_terms",
           "search_entry_cases",
           "get_entry_pack"
         ],

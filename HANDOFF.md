@@ -32,10 +32,12 @@
 - Mainnet D1 created in APAC: `b225aca0-3ac1-4fef-9968-d2275f84cf2b`.
 - Mainnet recipient confirmed: `0x5dc8c4a19ffd5dee720c3321a307d2a948d55656`.
 - Commercial scope confirmed: businesses and authorized business AI agents only; no household consumer sales.
+- B2B terms draft added with unfilled operator identity, support, remedy, law/forum, and tax decisions.
+- Free `get_commercial_terms` added; Mainnet paid delivery is fail-closed until its status is `ready`.
 - Migration `0001_purchases.sql` applied to Mainnet D1 on 2026-09-08.
 - Remote schema confirmed: `purchases`, expiry index, and migration table.
 - Mainnet dry-run confirmed 5 USDC, Base USDC, CDP facilitator, and dedicated D1.
 - Latest verification: TypeScript and all 21 tests pass.
 - Not performed: Mainnet Worker deployment, real payment, or external communication.
-- Legal blockers: seller disclosure, pre-payment terms, refund process, counsel and tax confirmation.
+- Legal blockers: operator details, delivery-failure remedy, law/forum, tax treatment, counsel confirmation.
 - Remaining gates: operator terms, qualified legal/tax review, Mainnet deployment approval, real-payment approval.

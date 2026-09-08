@@ -8,6 +8,7 @@ import {
   type EntryPackInput
 } from "../src/entry-pack";
 import { createPaidToolHandler } from "../src/paid-tool";
+import { commercialTermsFor, commercialTermsReady } from "../src/commercial-terms";
 import type { Purchase } from "../src/ledger";
 
 const config = paymentConfig({
@@ -64,6 +65,15 @@ function fakeDb() {
 }
 
 describe("Iya entry-case catalog", () => {
+  it("keeps Mainnet sale unavailable until operator commercial details are confirmed", () => {
+    expect(commercialTermsFor(ENTRY_PACK_ID)).toMatchObject({
+      purchaser_scope: "businesses and AI agents acting for an authorized business principal only",
+      consumer_sales_permitted: false,
+      status: "operator_details_pending"
+    });
+    expect(commercialTermsReady()).toBe(false);
+  });
+
   it("finds the single supported case and discloses scope before purchase", () => {
     const result = searchEntryCases({
       region_id: "jp-tokushima-miyoshi-iya",

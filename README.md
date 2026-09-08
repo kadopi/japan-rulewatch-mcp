@@ -7,6 +7,7 @@ It exposes the existing evidence tools plus one fixed tourism-entry product over
 - `search_rules` and `get_evidence_pack`: free ecommerce evidence lookup.
 - `get_tourism_preflight`: free A/B/C service-flow classification, missing facts, and manual-review triggers.
 - `get_tourism_evidence_pack`: x402-paid tourism evidence pack for a complete supported A/B/C flow.
+- `get_commercial_terms`: free commercial-terms profile and Mainnet sale-readiness for a paid product.
 - `search_entry_cases`: free search for the Iya soba experience sample and its known gaps.
 - `get_entry_pack`: paid retrieval of the fixed Iya soba entry-preparation pack.
 
@@ -25,6 +26,8 @@ The approved provisional price for `get_entry_pack` is 5 USDC per single purchas
 The paid service is offered only to businesses and AI agents acting for an
 authorized business principal. It is not offered for household consumer use;
 submitting payment represents business use under the disclosed purchase terms.
+Until the product-specific commercial profile is `ready`, Mainnet paid delivery is
+blocked before a payment requirement is returned.
 
 Mainnet preparation is documented in `docs/MAINNET_RUNBOOK.md`. The checked-in
 `wrangler.mainnet.example.jsonc` is intentionally non-deployable until a dedicated
