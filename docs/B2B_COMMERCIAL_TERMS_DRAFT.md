@@ -1,8 +1,8 @@
-# Japan Rule B2B commercial terms draft
+# Japan Rule B2B commercial terms reference
 
-Status: source-informed release candidate, 2026-09-08. Local draft; not yet
-deployed. Paid professional advice is not a blanket release requirement.
-Sales activation remains a separate operator decision.
+Status: reference explanation for the current Mainnet purchaser terms, 2026-09-08.
+The authoritative version and hash are returned by `get_commercial_terms` before
+each purchase. Paid professional advice is not a blanket release requirement.
 
 ## 運営者向け要約
 
@@ -112,13 +112,13 @@ Seven days is the delivery-retrieval window, not a promise to delete accounting
 or support records. The seller retains necessary records for their applicable
 business/legal purpose and handles data requests through the support email.
 
-## Remaining factual and implementation checks
+## Operational notes
 
 1. The operator confirmed the contracting seller is 門屋哲朗, an individual
    business owner trading as ぬこファクトリー. Telephone disclosure, if applicable,
    still needs a real contact.
-2. Display and bind the applicable terms before payment; the free terms tool
-   alone is not evidence that a buyer agreed. The sales gate remains closed.
+2. The service displays the current terms and records the accepted version and
+   hash before it returns a new payment requirement.
 3. Integrate USDC transaction records into the operator's existing annual filing
    process; see `COMMERCIAL_LEGAL_REVIEW.md`. No new accountant contract is required.
 4. No automatic refund implementation is promised by these terms.
