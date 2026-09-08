@@ -1,8 +1,8 @@
 # Japan RuleWatch latest handoff
 
-- Current: Mainnet sale gate opened 2026-09-08; commercial draft v4 and purchase-confirmation gate are deployed. One operator-authorized 5-USDC Mainnet purchase settled successfully.
-- Repo: japan-rulewatch-mcp-public, main. Latest implementation commit: a0304ca feat: require purchase terms confirmation.
-- Git status after this handoff update should be clean and pushed to origin/main.
+- Current: Mainnet sale gate opened 2026-09-08; commercial draft v4 and purchase-confirmation gate are deployed. One operator-authorized 5-USDC Mainnet purchase settled successfully. The public README and MCP manifest now point to the verified Mainnet endpoint and describe the business purchase flow.
+- Repo: japan-rulewatch-mcp-public, main. Latest local commit before this guide update: 1151b2d test: verify public buyer flow.
+- Git status: sales-guide update is ready to commit locally; push remains an explicit external action.
 - Live: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp
 - Initial deployment: 8dd72965-b140-4ebb-b849-87f09b6d0a4e (before secret update); purchase-gate version: 4de5bfb1-dd82-4980-985e-90ad323dbd57; sale-ready version: c1b0ca99-1c68-419f-8b39-d272c5b04050.
 - Both CDP secret names verified after 1Password-to-stdin registration; no plaintext secret files.

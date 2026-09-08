@@ -1,6 +1,6 @@
 # Japan RuleWatch
 
-Read-only Remote MCP for official Japanese rule evidence. The tourism pack targets overseas OTA and travel-tech teams implementing Japan-bound hotel flows.
+Remote MCP for official Japanese rule evidence. The current paid Mainnet product is a fixed Japan tourism entry-preparation pack for businesses and AI agents acting for an authorized business principal.
 
 It exposes the existing evidence tools plus one fixed tourism-entry product over stateless Streamable HTTP:
 
@@ -13,15 +13,18 @@ It exposes the existing evidence tools plus one fixed tourism-entry product over
 
 The paid pack returns official URLs, evidence locations, checked dates, source versions, general requirements, traveler-screen checks, and re-check triggers. It does not determine legal compliance, travel-business registration requirements, or legal risk for a particular service.
 
-## Public endpoint
+## Mainnet endpoint
 
-`https://japan-rulewatch-mcp.kadopi.workers.dev/mcp`
+`https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp`
 
-## Tourism flow
+## Paid Mainnet purchase flow
 
-Call `get_tourism_preflight` first with the four service-flow facts. Incomplete or unsupported facts remain free and return missing facts or a manual-review trigger. A complete supported flow can call `get_tourism_evidence_pack`; its x402 402 response is the authoritative payment requirement.
+1. Call `get_commercial_terms` with `jp-tokushima-miyoshi-iya-soba` to read the business-only purchase conditions.
+2. Call `get_entry_pack` with `{"pack_id":"jp-tokushima-miyoshi-iya-soba","language":"en"}`. The service returns the current terms version and hash, without requesting payment.
+3. Submit the returned terms version and hash with `business_purchase_confirmed: true`, the contracting business name, and its ISO country code.
+4. The service returns an x402 payment request for exactly 5 USDC on Base Mainnet. A compatible buyer wallet signs the request and receives the pack and purchase receipt.
 
-The approved provisional price for `get_entry_pack` is 5 USDC per single purchase. The saved result can be retrieved for seven days with the same payment proof, tool, normalized input, price condition, and content version. Future versions and indefinite storage are not included. Base Sepolia uses 0.01 test USDC only for integration verification. `X402_TEST_PRICE_USD` and `X402_SALE_PRICE_USD` are separate settings. Mainnet is not deployed or verified.
+The price is 5 USDC for one purchase on Base Mainnet. The saved result can be retrieved for seven days with the same payment proof, tool, normalized input, price condition, and content version. Base Sepolia uses 0.01 test USDC only for integration verification.
 
 The paid service is offered only to businesses and AI agents acting for an
 authorized business principal. It is not offered for household consumer use;
@@ -30,14 +33,9 @@ Until the product-specific commercial profile is `ready`, Mainnet paid delivery 
 blocked before a payment requirement is returned.
 Normal delivery and retrieval are automated. Unresolved purchase exceptions can
 be sent to the email in the purchase terms with a purchase ID and transaction
-reference, without private keys or raw payment proofs. No response deadline is
-promised. Refund terms remain a draft; this is not a blanket no-refund policy.
+reference. Do not send private keys or raw payment proofs.
 
-Mainnet preparation is documented in `docs/MAINNET_RUNBOOK.md`. The checked-in
-`wrangler.mainnet.example.jsonc` is intentionally non-deployable until a dedicated
-Mainnet D1 database and receiving address have been assigned. Deployment and real
-payment still require their own approvals.
-The pre-release commercial checklist is in `docs/COMMERCIAL_LEGAL_REVIEW.md`.
+The Mainnet runbook, including the first successful 5-USDC payment evidence, is in `docs/MAINNET_RUNBOOK.md`.
 
 Japan Rule is an independent, privately operated commercial information service. It is not operated by a government or municipality. Official-source links do not imply affiliation or endorsement. The fee covers Japan Rule's information service, not a government application or permit fee.
 
@@ -79,4 +77,4 @@ Endpoints:
 - D1 retains payment state and saved paid results; no private key or raw proof
 - Outputs are informational evidence, not legal advice
 
-Deployment is manual and requires explicit approval.
+Mainnet deployment and the first 5-USDC purchase have been verified. Future releases and payments remain separate operational decisions.
