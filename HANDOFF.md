@@ -1,9 +1,10 @@
 # Japan RuleWatch latest handoff
 
-- Current state: local implementation committed; no deployment performed.
+- Current state: Testnet implementation is pushed; Mainnet preparation is local only.
 - Repository: `japan-rulewatch-mcp-public` on branch `main`.
 - Implementation commit: `70e685f feat: add paid Iya soba entry pack`.
-- Worktree after handoff update: no remaining implementation changes.
+- Mainnet template and runbook added; placeholders prevent accidental deployment.
+- Commercial legal desk review added; it is not a lawyer's opinion.
 - Free tool added: `search_entry_cases(region_id, activity, language)`.
 - Paid tool added: `get_entry_pack(pack_id, language)`.
 - Supported region: `jp-tokushima-miyoshi-iya`.
@@ -27,5 +28,8 @@
 - Confirmed: TypeScript check passes.
 - Confirmed: 21 local tests pass, including mock payment and replay controls.
 - Safety boundary: no customer-specific legal conclusion or generated legal text.
-- Not performed: deployment, publication, real payment, external communication, or push.
-- Remaining decisions: Mainnet deployment approval, real-payment approval, commercial legal review, measured demand.
+- Confirmed blocker: Wrangler authentication expired in the non-interactive session.
+- Required inputs: dedicated Mainnet D1 ID and confirmed Mainnet recipient address.
+- Not performed: Mainnet deployment, real payment, or external communication.
+- Legal blockers: seller disclosure, pre-payment terms, refund process, counsel and tax confirmation.
+- Remaining gates: operator terms, qualified legal/tax review, Mainnet deployment approval, real-payment approval.

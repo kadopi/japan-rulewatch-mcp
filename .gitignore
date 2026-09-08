@@ -8,3 +8,4 @@ dist/
 .env*
 !.env.example
 wrangler.local.jsonc
+wrangler.mainnet.local.jsonc

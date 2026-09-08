@@ -22,6 +22,11 @@ Call `get_tourism_preflight` first with the four service-flow facts. Incomplete 
 
 The approved provisional price for `get_entry_pack` is 5 USDC per single purchase. The saved result can be retrieved for seven days with the same payment proof, tool, normalized input, price condition, and content version. Future versions and indefinite storage are not included. Base Sepolia uses 0.01 test USDC only for integration verification. `X402_TEST_PRICE_USD` and `X402_SALE_PRICE_USD` are separate settings. Mainnet is not deployed or verified.
 
+Mainnet preparation is documented in `docs/MAINNET_RUNBOOK.md`. The checked-in
+`wrangler.mainnet.example.jsonc` is intentionally non-deployable until a dedicated
+Mainnet D1 database and confirmed receiving address replace its placeholders.
+The pre-release commercial checklist is in `docs/COMMERCIAL_LEGAL_REVIEW.md`.
+
 Japan Rule is an independent, privately operated commercial information service. It is not operated by a government or municipality. Official-source links do not imply affiliation or endorsement. The fee covers Japan Rule's information service, not a government application or permit fee.
 
 ## Example: find official sources for a Japanese ecommerce workflow

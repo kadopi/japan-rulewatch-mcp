@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "japan-rulewatch-mcp-mainnet",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-03",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "X402_NETWORK": "eip155:8453",
+    "X402_ASSET": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "X402_AMOUNT": "5000000",
+    "X402_SALE_PRICE_USD": "5",
+    "X402_FACILITATOR_URL": "https://api.cdp.coinbase.com/platform/v2/x402",
+    "X402_PAY_TO": "REPLACE_WITH_CONFIRMED_MAINNET_RECIPIENT"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "japan-rulewatch-purchases-mainnet",
+      "database_id": "REPLACE_WITH_MAINNET_D1_DATABASE_ID"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": { "head_sampling_rate": 0.1 }
+  }
+}
