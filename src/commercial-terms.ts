@@ -22,7 +22,7 @@ type CommercialTerms = {
 export const ENTRY_PACK_COMMERCIAL_TERMS: CommercialTerms = {
   product_id: ENTRY_PACK_ID,
   terms_version: purchaseTerms.commercial_terms_version,
-  status: "operator_details_pending",
+  status: "ready",
   purchaser_scope: purchaseTerms.purchaser_scope,
   consumer_sales_permitted: purchaseTerms.consumer_sales_permitted,
   price: { amount_usdc: purchaseTerms.sale_price_usdc, network: "Base Mainnet", purchase_type: purchaseTerms.purchase_type },

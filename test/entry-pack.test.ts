@@ -71,20 +71,20 @@ function fakeDb(failReceipt = false, failPreparation = false) {
 }
 
 describe("Iya entry-case catalog", () => {
-  it("keeps Mainnet sale unavailable until the operator explicitly opens it", () => {
+  it("keeps Mainnet sale closed until the operator explicitly opens it", () => {
     expect(commercialTermsFor(ENTRY_PACK_ID)).toMatchObject({
       purchaser_scope: "businesses and AI agents acting for an authorized business principal only",
       consumer_sales_permitted: false,
-      status: "operator_details_pending"
+      status: "ready"
     });
-    expect(commercialTermsReady()).toBe(false);
+    expect(commercialTermsReady()).toBe(true);
     expect(commercialTermsReady({ ...commercialTermsFor(ENTRY_PACK_ID)!, status: "ready" })).toBe(true);
   });
 
   it("requires a current terms hash and business purchase declaration before a new purchase", async () => {
     const input = { pack_id: ENTRY_PACK_ID, language: "en" };
     await expect(validateEntryPurchase(input, true)).resolves.toMatchObject({
-      error: "COMMERCIAL_TERMS_NOT_READY", paymentRequired: false
+      error: "PURCHASE_CONFIRMATION_REQUIRED", paymentRequired: false
     });
     const { snapshot, sha256 } = await entryPurchaseTerms();
     await expect(validateEntryPurchase({

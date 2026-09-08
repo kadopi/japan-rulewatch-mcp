@@ -1,12 +1,12 @@
 # Japan RuleWatch latest handoff
 
-- Current: Mainnet deployed with sales closed; commercial draft v4 and purchase-confirmation gate deployed 2026-09-08.
+- Current: Mainnet sale gate opened 2026-09-08; commercial draft v4 and purchase-confirmation gate are deployed.
 - Repo: japan-rulewatch-mcp-public, main. Latest implementation commit: a0304ca feat: require purchase terms confirmation.
 - Git status after this handoff update should be clean and pushed to origin/main.
 - Live: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp
-- Initial deployment: 8dd72965-b140-4ebb-b849-87f09b6d0a4e (before secret update); current purchase-gate version: 4de5bfb1-dd82-4980-985e-90ad323dbd57.
+- Initial deployment: 8dd72965-b140-4ebb-b849-87f09b6d0a4e (before secret update); purchase-gate version: 4de5bfb1-dd82-4980-985e-90ad323dbd57; sale-ready version: c1b0ca99-1c68-419f-8b39-d272c5b04050.
 - Both CDP secret names verified after 1Password-to-stdin registration; no plaintext secret files.
-- Last live checks: health and free search OK; entry purchase returns COMMERCIAL_TERMS_NOT_READY/paymentRequired:false plus the terms snapshot/hash.
+- Last live check: unpaid entry purchase returns PURCHASE_CONFIRMATION_REQUIRED/paymentRequired:false plus current terms snapshot/hash and five required buyer fields.
 - Local authenticated CDP GET /supported: HTTP 200, Base x402 v2 exact. Worker-side CDP request/settlement untested.
 - Confirmed this turn: TypeScript, 30 tests, git diff --check pass.
 - Product: jp-tokushima-miyoshi-iya-soba, en, content 2026-09-08.2.
@@ -19,7 +19,7 @@
 - Normal refund: original Base payer after receipt checks; authenticated alternative if needed; seller pays refund tx fee.
 - No automatic refund; no promised support response deadline; email for exceptions.
 - Draft law/forum: Japanese law; Matsuyama District/Summary Court as appropriate; mandatory rights preserved.
-- Terms version: 2026-09-08-b2b-draft-4. Status remains operator_details_pending; sale not activated.
+- Terms version: 2026-09-08-b2b-draft-4. Status ready; sale is activated after buyer confirmation.
 - Seller confirmed by operator: 門屋哲朗, sole proprietor trading as ぬこファクトリー. Draft documents updated locally.
 - User files taxes annually; supplement existing accounting only with USDC amount/time/JPY source/tx/refund records.
 - Do not infer foreign buyer residence from English/wallet/chain; country declaration is now captured but remains self-declared evidence only.
@@ -32,7 +32,7 @@
 - Next: decide any separate accounting export/retention workflow. Sales activation and real payment remain separate approvals.
 - Mainnet D1: b225aca0-3ac1-4fef-9968-d2275f84cf2b; migration 0001 applied 2026-09-08.
 - Recipient: 0x5dc8c4a19ffd5dee720c3321a307d2a948d55656; Base native USDC; separate Testnet price 0.01.
-- No real payment, sales activation or current draft deployment performed.
+- No real payment performed. Sales activation and current draft deployment completed under explicit approval.
 - Safety: no individual legal-compliance verdict; existing tourism paid pack stays unavailable on Mainnet.
 - Known dependency audit: SDK transitive axios and existing Vitest reports; no blanket upgrades.
-- Sales activation, real payment, and external publication remain action-specific approvals.
+- Real payment remains an action-specific approval.
