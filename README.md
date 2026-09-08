@@ -22,6 +22,10 @@ Call `get_tourism_preflight` first with the four service-flow facts. Incomplete 
 
 The approved provisional price for `get_entry_pack` is 5 USDC per single purchase. The saved result can be retrieved for seven days with the same payment proof, tool, normalized input, price condition, and content version. Future versions and indefinite storage are not included. Base Sepolia uses 0.01 test USDC only for integration verification. `X402_TEST_PRICE_USD` and `X402_SALE_PRICE_USD` are separate settings. Mainnet is not deployed or verified.
 
+The paid service is offered only to businesses and AI agents acting for an
+authorized business principal. It is not offered for household consumer use;
+submitting payment represents business use under the disclosed purchase terms.
+
 Mainnet preparation is documented in `docs/MAINNET_RUNBOOK.md`. The checked-in
 `wrangler.mainnet.example.jsonc` is intentionally non-deployable until a dedicated
 Mainnet D1 database and receiving address have been assigned. Deployment and real

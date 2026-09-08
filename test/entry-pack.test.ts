@@ -74,6 +74,8 @@ describe("Iya entry-case catalog", () => {
     expect(result.results[0]).toMatchObject({ pack_id: ENTRY_PACK_ID });
     expect(result.results[0]?.missing_information).toContain("contracting_party");
     expect(result.results[0]?.purchase_terms).toMatchObject({
+      purchaser_scope: "businesses and AI agents acting for an authorized business principal only",
+      consumer_sales_permitted: false,
       sale_price_usdc: 5,
       saved_result_days: 7,
       future_versions_included: false

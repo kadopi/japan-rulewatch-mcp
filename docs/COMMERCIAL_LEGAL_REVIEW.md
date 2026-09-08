@@ -5,12 +5,12 @@ individual determination of legal compliance.
 
 ## Release blockers
 
-1. Publish an easily reachable Specified Commercial Transactions Act notice.
+1. Publish an easily reachable business-sales notice.
    It should identify the legal seller/operator name, operating address,
    reachable telephone number, and representative or responsible person.
 2. State the total consideration and tax treatment, payment method and timing,
    delivery timing, service period, cancellation/refund terms, and support route.
-3. Show those terms before the buyer creates the 5-USDC payment signature. The
+3. Show those terms and the business-only purchaser representation before the buyer creates the 5-USDC payment signature. The
    buyer must be able to identify the purchase, quantity, total price, delivery,
    and cancellation terms without relying only on post-payment output.
 4. Define the digital-delivery failure/refund process. The existing seven-day
@@ -26,6 +26,7 @@ individual determination of legal compliance.
 
 ## Already present
 
+- Purchaser scope is businesses and authorized business AI agents only; household consumer sales are not offered.
 - Fixed product, price, supported input, and seven-day saved-result terms.
 - Private commercial operator and no government affiliation/endorsement notice.
 - Informational evidence only; no customer-specific legal conclusion.
@@ -47,3 +48,5 @@ individual determination of legal compliance.
 Mainnet technical preparation may continue, but public sale and the real 5-USDC
 test remain on hold until items 1-4 have concrete operator-approved terms and
 items 5-7 have qualified professional confirmation or an accepted risk decision.
+The business-only scope reduces ambiguity but does not itself determine the
+applicability of Japanese consumer or financial regulations.

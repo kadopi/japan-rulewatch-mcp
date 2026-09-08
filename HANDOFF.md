@@ -31,6 +31,7 @@
 - Cloudflare login restored on 2026-09-08.
 - Mainnet D1 created in APAC: `b225aca0-3ac1-4fef-9968-d2275f84cf2b`.
 - Mainnet recipient confirmed: `0x5dc8c4a19ffd5dee720c3321a307d2a948d55656`.
+- Commercial scope confirmed: businesses and authorized business AI agents only; no household consumer sales.
 - Migration `0001_purchases.sql` applied to Mainnet D1 on 2026-09-08.
 - Remote schema confirmed: `purchases`, expiry index, and migration table.
 - Mainnet dry-run confirmed 5 USDC, Base USDC, CDP facilitator, and dedicated D1.
