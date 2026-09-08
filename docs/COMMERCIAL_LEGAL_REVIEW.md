@@ -1,52 +1,54 @@
-# Commercial legal review checklist
+# 販売条件の根拠と公開前の実務確認
 
-Status: primary-source desk review only; this is not a lawyer's opinion or an
-individual determination of legal compliance.
+更新：2026-09-08。公的資料に基づく作成案であり、公的機関が承認した約款ではない。
+弁護士・税理士の有料相談や回答取得を一律の公開条件としない。未解決の具体的な論点に限り公的窓口等を利用する。
 
-## Release blockers
+## 販売条件への反映
 
-1. Publish an easily reachable business-sales notice.
-   It should identify the legal seller/operator name, operating address,
-   reachable telephone number, and representative or responsible person.
-2. State the total consideration and tax treatment, payment method and timing,
-   delivery timing, service period, cancellation/refund terms, and support route.
-3. Show those terms and the business-only purchaser representation before the buyer creates the 5-USDC payment signature. The
-   buyer must be able to identify the purchase, quantity, total price, delivery,
-   and cancellation terms without relying only on post-payment output.
-4. Define the digital-delivery failure/refund process. The existing seven-day
-   same-proof replay is delivery recovery, not a complete refund policy.
-5. Confirm with Japanese counsel whether the MCP/x402 flow is a regulated
-   mail-order advertisement/application flow and whether the machine-readable
-   payment step satisfies final-confirmation display requirements.
-6. Confirm with financial-regulatory counsel that accepting USDC only as payment
-   for this operator's own information service does not add registration duties
-   for this exact flow. Do not market exchange, custody, brokerage, or transfer.
-7. Obtain tax/accounting advice for consumption-tax display, cross-border sales,
-   and JPY valuation of USDC receipts.
+| 項目 | 採用する案・根拠 | 残る実務 |
+| --- | --- | --- |
+| 購入者 | 事業者と権限ある代理AI。消費者庁の適用除外Q&Aを参考 | B2B表示だけで特商法の適用除外は確定しない |
+| 価格・提供 | 売主への総支払額5 USDC、追加請求なし。提供時期と7日間再取得を明示 | 購入前に条件を表示し、購入に結び付ける |
+| 取消・返金 | 正常提供後の都合取消を制限し、未提供・重大な内容不一致の救済を残す | 返品特約と契約不適合の救済を混同しない。自動返金は未実装 |
+| 準拠法・管轄 | 日本法、松山地方裁判所または松山簡易裁判所を第一審の合意管轄とする案 | 合意の成立・記録が必要。強行規定を排除しない。外国での効力は保証しない |
+| 売主 | 運営者の回答により門屋哲朗（個人事業者、屋号：ぬこファクトリー）と確認。提供済みの住所・メールを記載 | 必要な電話番号は創作しない |
+| USDC | 自社情報サービスの対価受領と返金に限定 | 金融庁資料はUSDCを電子決済手段として扱う。一般の暗号資産税務FAQをそのまま当てはめない |
 
-## Already present
+金融庁の登録案内は電子決済手段の仲介等を業として行う場合の規律を示す。
+自社売上受領とは行為を分けて検討する必要があり、案内だけから個別フローの「登録不要」を断定しない。
+交換・顧客資産管理・第三者への送金代行を追加する場合は再確認する。
 
-- Purchaser scope is businesses and authorized business AI agents only; household consumer sales are not offered.
-- Fixed product, price, supported input, and seven-day saved-result terms.
-- Private commercial operator and no government affiliation/endorsement notice.
-- Informational evidence only; no customer-specific legal conclusion.
-- Unknown product/language is rejected before payment.
+## 既存の申告・記帳への補足
 
-## Primary sources checked on 2026-09-08
+運営者は毎年申告している。新たな申告体制や税理士契約を要求せず、既存の帳簿へ以下を追加する運用案とする。
 
-- Consumer Affairs Agency, mail-order advertising requirements:
-  https://www.no-trouble.caa.go.jp/what/mailorder/advertising.html
-- Consumer Affairs Agency, application/final-confirmation guidance:
-  https://www.no-trouble.caa.go.jp/what/mailorder/guidelines.html
-- Consumer Affairs Agency, final-confirmation summary:
-  https://www.caa.go.jp/notice/assets/consumer_transaction_cms203_240315_02.pdf
-- Financial Services Agency, FinTech support desk and registration guidance:
-  https://www.fsa.go.jp/news/27/sonota/20151214-2.html
+- 購入ID、決済日時、USDC数量、ネットワーク、取引ハッシュ、提供状態を対応付ける。
+- 円換算額と相場の時点・出典を残す。5 USDCを一律5米ドルと決め打ちせず、既存の会計方針に整合させる。
+- 返金は元売上と返金ハッシュを対応付け、換金・手数料も別途記録する。
+- 英語、ウォレット住所、Base利用だけで国外売上に分類しない。
+- 国税庁の案内に照らし、固定デジタル情報配信は電気通信利用役務として検討するのが妥当との推定。
+  国内外判定は受領者の住所等が重要。現状の入力では購入事業者の所在地の裏付けが不足しており、取得方法は実装課題。
+- 課税・免税、インボイス登録等は既存の事業者情報に従う。未確認の登録番号や適格請求書発行の約束は記載しない。
+- 7日間の再取得期間と会計証憑の保存は別物。D1の期限処理に頼らず必要な売上記録を既存会計へ保存する。
 
-## Decision
+## 次の作業
 
-Mainnet technical preparation may continue, but public sale and the real 5-USDC
-test remain on hold until items 1-4 have concrete operator-approved terms and
-items 5-7 have qualified professional confirmation or an accepted risk decision.
-The business-only scope reduces ambiguity but does not itself determine the
-applicability of Japanese consumer or financial regulations.
+販売条件案は B2B_COMMERCIAL_TERMS_DRAFT.md。任意の問い合わせ用の確認票は PROFESSIONAL_REVIEW_BRIEF.md。
+売主の契約主体は運営者の回答で確認済み。購入前の条件表示・ハッシュ同意・事業利用確認・事業者名・国コードの購入記録への紐付けはローカル実装済み。
+国コードは購入者の申告であり、居住地の独立確認や税区分の自動判定ではない。
+公開前の残作業は、これらの条件を公開済みWorkerへ反映することと、必要なら会計側での所在地資料の補完方法を決めること。
+専門家の回答待ちという包括的な停止条件は撤回する。販売開始・実決済は従来どおり別承認。
+
+## 参考資料（2026-09-08確認）
+
+- [消費者庁：通信販売広告の表示事項](https://www.no-trouble.caa.go.jp/what/mailorder/advertising.html)
+- [消費者庁：営業目的の契約の適用除外Q&A](https://www.no-trouble.caa.go.jp/qa/exclusion.html)
+- [消費者庁：返品特約ガイドライン](https://www.no-trouble.caa.go.jp/pdf/20230421la02_07.pdf)
+- [法務省：法の適用に関する通則法 第7条等](https://www.japaneselawtranslation.go.jp/ja/laws/view/3783/ja)
+- [法務省：民事訴訟法 第3条の7・第11条等](https://www.japaneselawtranslation.go.jp/ja/laws/view/4797/ja)
+- [金融庁：電子決済手段等取引業の案内](https://www.fsa.go.jp/common/shinsei/dendai/dentori.html)
+- [金融庁：金融犯罪対策資料（USDCの位置付け）](https://www.fsa.go.jp/news/r6/20250627/01.pdf)
+- [国税庁：国境を越えた役務の提供](https://www.nta.go.jp/taxes/shiraberu/taxanswer/shohi/6118.htm)
+- [国税庁：内外判定Q&A](https://www.nta.go.jp/publication/pamph/pdf/cross-QA.pdf)
+
+法務省の翻訳DBは参考掲載版であり、改正確認の原典はe-Govの現行法令とする。

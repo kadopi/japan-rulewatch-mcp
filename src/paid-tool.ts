@@ -18,6 +18,7 @@ export interface PaidToolOptions<TArgs extends Record<string, unknown>> {
   config: ReturnType<typeof paymentConfig>;
   resourceServer: ResourceServer;
   initialize: () => Promise<void>;
+  validateNewPurchase?: (args: TArgs) => Promise<Record<string, unknown> | null>;
   execute: (args: TArgs) => Promise<Record<string, unknown>> | Record<string, unknown>;
 }
 
@@ -30,6 +31,9 @@ export function createPaidToolHandler<TArgs extends Record<string, unknown>>(opt
       const existing = await getPurchase(options.env.DB, fingerprint);
       if (existing) return existingPurchaseResponse(existing, inputHash, options.toolName, options.config);
     }
+    // Existing purchases replay their saved terms without accepting a newer version.
+    const validation = await options.validateNewPurchase?.(args);
+    if (validation) return result(validation, undefined, true);
     await options.initialize();
     const requirements = await options.resourceServer.buildPaymentRequirements({ scheme: "exact", payTo: options.config.recipient, price: options.config.priceUsd, network: options.config.network, maxTimeoutSeconds: 300 });
     if (typeof token !== "string") return paymentRequired(requirements, options.resource);
@@ -90,7 +94,7 @@ export function existingPurchaseResponse(purchase: Purchase, inputHash: string, 
 
 function paymentRequired(accepts: unknown, resource: PaidToolOptions<Record<string, unknown>>["resource"], reason = "PAYMENT_REQUIRED") { return { isError: true, _meta: { "x402/error": { x402Version: 2, error: reason, resource: { ...resource, mimeType: "application/json" }, accepts } }, content: [{ type: "text" as const, text: JSON.stringify({ error: reason, resource, accepts }) }] }; }
 function pendingReceipt(purchaseId: string) { return error("payment_confirmation_pending", "Settlement outcome is unknown. Retry only with the same payment proof; do not create a new payment.", { purchaseId }); }
-function result(value: unknown, meta?: Record<string, unknown>) { return { content: [{ type: "text" as const, text: JSON.stringify(value) }], structuredContent: value as Record<string, unknown>, ...(meta ? { _meta: meta } : {}) }; }
+function result(value: unknown, meta?: Record<string, unknown>, isError?: boolean) { return { content: [{ type: "text" as const, text: JSON.stringify(value) }], structuredContent: value as Record<string, unknown>, ...(meta ? { _meta: meta } : {}), ...(isError ? { isError: true } : {}) }; }
 function error(code: string, message: string, details?: unknown) { const value = { error: code, message, ...(details && typeof details === "object" ? details : {}) }; return { isError: true, content: [{ type: "text" as const, text: JSON.stringify(value) }], structuredContent: value }; }
 function canonicalJson(value: unknown): string { if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`; if (value && typeof value === "object") { const record = value as Record<string, unknown>; return `{${Object.keys(record).sort().map(k => `${JSON.stringify(k)}:${canonicalJson(record[k])}`).join(",")}}`; } return JSON.stringify(value); }
 async function sha256(value: string): Promise<string> { const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value)); return [...new Uint8Array(bytes)].map(b => b.toString(16).padStart(2, "0")).join(""); }

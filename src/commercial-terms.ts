@@ -33,12 +33,12 @@ export const ENTRY_PACK_COMMERCIAL_TERMS: CommercialTerms = {
   },
   delivery_failure: {
     automatic_recovery: false,
-    remedy: "prepared delivery can be retrieved after settlement is recorded; unconfirmed settlement or missing delivery requires operator support; no automatic on-chain refund"
+    remedy: "no change-of-mind cancellation after successful delivery; seven-day same-proof retrieval does not limit non-delivery claims; confirmed non-delivery or material mismatch is remedied first, then refunded at 5 USDC if it cannot be remedied; manual refund normally to the original Base payer address after receipt checks, with an authenticated alternative if necessary; seller pays refund transaction fees; mandatory legal remedies remain unaffected"
   },
-  operator_details: "pending",
+  operator_details: "門屋哲朗 (sole proprietor trading as ぬこファクトリー); 〒790-0012 愛媛県松山市湊町４丁目５－６プログレッソ松山",
   support_channel: purchaseTerms.support.email,
   support: purchaseTerms.support,
-  governing_law_and_forum: "pending legal review",
+  governing_law_and_forum: "Japanese law; Matsuyama District Court or Matsuyama Summary Court as appropriate has exclusive first-instance jurisdiction to the extent permitted by applicable law; mandatory rules prevail",
   data_handling: "payment ledger stores settlement and delivery state, never private keys or raw payment proofs"
 };
 

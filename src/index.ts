@@ -5,17 +5,18 @@ import { registerExactEvmScheme } from "@x402/evm/exact/server";
 import { z } from "zod";
 import { DATASET_UPDATED_AT, getEvidencePack, RULES, searchRules } from "./rules";
 import { paymentConfig } from "./config";
+import { facilitatorConfig } from "./facilitator";
 import { createPaidToolHandler } from "./paid-tool";
 import { buildTourismEvidencePack, buildTourismPreflight } from "./tourism";
 import {
   entryPackInputError,
-  getEntryPack,
   PRIVATE_OPERATOR_NOTICE,
   searchEntryCases,
   type EntryPackInput
 } from "./entry-pack";
 import { ENTRY_PACK_PURCHASE_TERMS } from "./product-terms";
-import { commercialTermsFor, commercialTermsReady } from "./commercial-terms";
+import { commercialTermsFor } from "./commercial-terms";
+import { ENTRY_PURCHASE_INPUT_SCHEMA, entryPurchaseTerms, prepareEntryPurchase, validateEntryPurchase } from "./entry-purchase";
 
 const DISCLAIMER =
   "Informational evidence only. This service does not provide legal advice or determine legal compliance. Verify the current official source before acting.";
@@ -38,11 +39,6 @@ const TOURISM_INPUT_SCHEMA = z.object({
   actsAsContractingParty: z.boolean().optional()
 });
 
-const ENTRY_PACK_INPUT_SCHEMA = z.object({
-  pack_id: z.string().trim().min(1).max(100),
-  language: z.string().trim().min(2).max(10)
-});
-
 function createServer(env: Env) {
   const config = paymentConfig(env);
   const server = new McpServer({
@@ -50,7 +46,7 @@ function createServer(env: Env) {
     version: "0.1.0"
   });
   const resourceServer = new x402ResourceServer(
-    new HTTPFacilitatorClient({ url: config.facilitatorUrl })
+    new HTTPFacilitatorClient(facilitatorConfig(env, config.facilitatorUrl))
   );
   registerExactEvmScheme(resourceServer);
   let initialized: Promise<void> | undefined;
@@ -121,7 +117,8 @@ function createServer(env: Env) {
     config,
     resourceServer,
     initialize,
-    execute: (input) => getEntryPack(input)!
+    validateNewPurchase: (input) => validateEntryPurchase(input, config.network === "eip155:8453"),
+    execute: prepareEntryPurchase
   });
 
   server.registerTool(
@@ -129,7 +126,7 @@ function createServer(env: Env) {
     {
       description:
         "Paid: return the fixed Iya soba entry-preparation pack with sources, contacts, consultation text, unknowns, and next actions. It gives no customer-specific legal verdict. Japan Rule is not a government service.",
-      inputSchema: ENTRY_PACK_INPUT_SCHEMA
+      inputSchema: ENTRY_PURCHASE_INPUT_SCHEMA
     },
     async (input, extra) => {
       const error = entryPackInputError(input);
@@ -146,19 +143,6 @@ function createServer(env: Env) {
               })
             }
           ]
-        };
-      }
-      if (config.network === "eip155:8453" && !commercialTermsReady()) {
-        return {
-          isError: true,
-          content: [{
-            type: "text" as const,
-            text: JSON.stringify({
-              error: "COMMERCIAL_TERMS_NOT_READY",
-              paymentRequired: false,
-              terms: commercialTermsFor(input.pack_id)
-            })
-          }]
         };
       }
       return paidEntryPack(input, extra);

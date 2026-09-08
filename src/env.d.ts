@@ -1,4 +1,6 @@
 interface Env {
+  CDP_API_KEY_ID?: string;
+  CDP_API_KEY_SECRET?: string;
   DB: D1Database;
   X402_NETWORK: string;
   X402_ASSET: string;

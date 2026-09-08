@@ -9,6 +9,7 @@ import {
 } from "../src/entry-pack";
 import { createPaidToolHandler } from "../src/paid-tool";
 import { commercialTermsFor, commercialTermsReady } from "../src/commercial-terms";
+import { entryPurchaseTerms, validateEntryPurchase } from "../src/entry-purchase";
 import type { Purchase } from "../src/ledger";
 
 const config = paymentConfig({
@@ -70,14 +71,26 @@ function fakeDb(failReceipt = false, failPreparation = false) {
 }
 
 describe("Iya entry-case catalog", () => {
-  it("keeps Mainnet sale unavailable until operator commercial details are confirmed", () => {
+  it("keeps Mainnet sale unavailable until the operator explicitly opens it", () => {
     expect(commercialTermsFor(ENTRY_PACK_ID)).toMatchObject({
       purchaser_scope: "businesses and AI agents acting for an authorized business principal only",
       consumer_sales_permitted: false,
       status: "operator_details_pending"
     });
     expect(commercialTermsReady()).toBe(false);
-    expect(commercialTermsReady({ ...commercialTermsFor(ENTRY_PACK_ID)!, status: "ready" })).toBe(false);
+    expect(commercialTermsReady({ ...commercialTermsFor(ENTRY_PACK_ID)!, status: "ready" })).toBe(true);
+  });
+
+  it("requires a current terms hash and business purchase declaration before a new purchase", async () => {
+    const input = { pack_id: ENTRY_PACK_ID, language: "en" };
+    await expect(validateEntryPurchase(input, true)).resolves.toMatchObject({
+      error: "COMMERCIAL_TERMS_NOT_READY", paymentRequired: false
+    });
+    const { snapshot, sha256 } = await entryPurchaseTerms();
+    await expect(validateEntryPurchase({
+      ...input, accepted_terms_version: snapshot.terms_version, accepted_terms_sha256: sha256,
+      business_purchase_confirmed: true, buyer_business_name: "Example Ltd", buyer_country_code: "JP"
+    }, false)).resolves.toBeNull();
   });
 
   it("finds the single supported case and discloses scope before purchase", () => {

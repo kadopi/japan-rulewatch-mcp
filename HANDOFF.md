@@ -1,40 +1,38 @@
 # Japan RuleWatch latest handoff
 
-- Current state: delivery fixes and approved minimal support policy complete; Mainnet sale pending.
-- Repository: `japan-rulewatch-mcp-public` on branch `main`.
-- Previous commit: `839b90d`; this change records the approved exception-email support policy.
-- Mainnet config contains confirmed D1 and recipient; paid tool gate prevents new sales.
-- Free tool added: `search_entry_cases(region_id, activity, language)`.
-- Paid tool added: `get_entry_pack(pack_id, language)`.
-- Supported: `jp-tokushima-miyoshi-iya` / `food_culture_workshop` / `en`.
-- Pack ID: `jp-tokushima-miyoshi-iya-soba`.
-- Content version: `2026-09-08.2`.
-- Canonical data: `data/IYA-EXPERIENCE-DATA.json`.
-- Free discovery and paid result disclose the fictional sample and private operator.
-- Operator: private service; official links imply no government affiliation or endorsement.
-- Approved provisional sale price: 5 USDC per single purchase.
-- Test price: 0.01 USDC on Base Sepolia, configured separately.
-- Saved-result retrieval window: seven days from the existing x402 Starter.
-- Free replay scope: same proof, tool, normalized input, price condition, and saved version.
-- Future content versions and indefinite storage are not included.
-- Existing x402 verify, settle, ledger, saved result, and replay logic is reused.
-- Unknown pack IDs and unsupported languages stop before payment.
-- Confirmed: TypeScript and 27 tests pass; saved replay works with facilitator offline.
-- Delivery is persisted before settlement using existing result_json; no migration required.
-- Recorded settlement permits prepared-result replay after receipt-write failure.
-- Unconfirmed settlement/missing data requires support; no automatic refund.
-- Safety boundary: no customer-specific legal conclusion or generated legal text.
-- Mainnet D1 created in APAC: `b225aca0-3ac1-4fef-9968-d2275f84cf2b`.
-- Mainnet recipient confirmed: `0x5dc8c4a19ffd5dee720c3321a307d2a948d55656`.
-- Commercial scope confirmed: businesses and authorized business AI agents only; no household consumer sales.
-- Operator identity/contact in B2B draft; public repository publication explicitly approved.
-- Free `get_commercial_terms` added; Mainnet paid delivery is fail-closed until its status is `ready`.
-- Migration `0001_purchases.sql` applied to Mainnet D1 on 2026-09-08.
-- Remote schema confirmed: `purchases`, expiry index, and migration table.
-- Mainnet dry-run confirmed 5 USDC, Base USDC, CDP facilitator, and dedicated D1.
-- Shared purchase fields now drive the commercial profile; pending fields block readiness.
-- Full terms snapshot/hash binding and live CDP verification remain unimplemented/unverified.
-- Not performed: Mainnet Worker deployment or real payment; coordinator progress report sent.
-- Support confirmed: automated normal operation; existing email for exceptions; no reply deadline.
-- Pending: remedy/refund policy, law/forum, tax treatment, counsel confirmation.
-- Remaining gates: operator terms, qualified legal/tax review, Mainnet deployment approval, real-payment approval.
+- Current: Mainnet deployed with sales closed; commercial draft v4 and purchase-confirmation gate deployed 2026-09-08.
+- Repo: japan-rulewatch-mcp-public, main. Last commit: 50633ac feat: require purchase terms confirmation.
+- Git status after this handoff update should be clean and pushed to origin/main.
+- Live: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp
+- Initial deployment: 8dd72965-b140-4ebb-b849-87f09b6d0a4e (before secret update); current purchase-gate version: 4de5bfb1-dd82-4980-985e-90ad323dbd57.
+- Both CDP secret names verified after 1Password-to-stdin registration; no plaintext secret files.
+- Last live checks: health and free search OK; entry purchase returns COMMERCIAL_TERMS_NOT_READY/paymentRequired:false plus the terms snapshot/hash.
+- Local authenticated CDP GET /supported: HTTP 200, Base x402 v2 exact. Worker-side CDP request/settlement untested.
+- Confirmed this turn: TypeScript, 30 tests, git diff --check pass.
+- Product: jp-tokushima-miyoshi-iya-soba, en, content 2026-09-08.2.
+- Canonical data: data/IYA-EXPERIENCE-DATA.json; fictional sample/private operator notices retained.
+- Commercial scope: businesses (including sole proprietors) and their authorized AI agents.
+- Price: 5 USDC single purchase; draft total includes applicable seller tax, no later seller surcharge.
+- Delivery saved before settlement; recorded settlement allows recovery after final receipt-write failure.
+- Seven-day same-proof/tool/input/price/version retrieval; not an expiry of non-delivery claims.
+- Draft remedy: recover/correct first; confirmed unremediable non-delivery/material mismatch refunded manually.
+- Normal refund: original Base payer after receipt checks; authenticated alternative if needed; seller pays refund tx fee.
+- No automatic refund; no promised support response deadline; email for exceptions.
+- Draft law/forum: Japanese law; Matsuyama District/Summary Court as appropriate; mandatory rights preserved.
+- Terms version: 2026-09-08-b2b-draft-4. Status remains operator_details_pending; sale not activated.
+- Seller confirmed by operator: 門屋哲朗, sole proprietor trading as ぬこファクトリー. Draft documents updated locally.
+- User files taxes annually; supplement existing accounting only with USDC amount/time/JPY source/tx/refund records.
+- Do not infer foreign buyer residence from English/wallet/chain; country declaration is now captured but remains self-declared evidence only.
+- Paid lawyer/tax-adviser sign-off is NOT a blanket release requirement; earlier mandatory wording withdrawn.
+- Sources/proposed decisions: docs/COMMERCIAL_LEGAL_REVIEW.md.
+- Reviewable Japanese summary + English terms: docs/B2B_COMMERCIAL_TERMS_DRAFT.md.
+- Optional targeted inquiry only: docs/PROFESSIONAL_REVIEW_BRIEF.md.
+- Local purchase gate implemented: current terms snapshot/hash, business-use confirmation, business name and ISO country declaration are required before a new payment request.
+- Existing same-proof replays bypass the new-purchase gate and return their original saved result.
+- Next: decide any separate accounting export/retention workflow. Sales activation and real payment remain separate approvals.
+- Mainnet D1: b225aca0-3ac1-4fef-9968-d2275f84cf2b; migration 0001 applied 2026-09-08.
+- Recipient: 0x5dc8c4a19ffd5dee720c3321a307d2a948d55656; Base native USDC; separate Testnet price 0.01.
+- No real payment, sales activation or current draft deployment performed.
+- Safety: no individual legal-compliance verdict; existing tourism paid pack stays unavailable on Mainnet.
+- Known dependency audit: SDK transitive axios and existing Vitest reports; no blanket upgrades.
+- Sales activation, real payment, and external publication remain action-specific approvals.

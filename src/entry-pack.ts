@@ -7,6 +7,11 @@ export const ENTRY_PACK_LANGUAGE = "en";
 export type EntryPackInput = {
   pack_id: string;
   language: string;
+  accepted_terms_version?: string;
+  accepted_terms_sha256?: string;
+  business_purchase_confirmed?: boolean;
+  buyer_business_name?: string;
+  buyer_country_code?: string;
 };
 
 export type EntryCaseSearchInput = {
