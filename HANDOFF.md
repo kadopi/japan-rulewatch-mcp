@@ -1,23 +1,18 @@
 # Japan RuleWatch latest handoff
 
-- Current state: Testnet implementation is pushed; Mainnet preparation is local only.
+- Current state: delivery preparation and replay fixes complete; commit/push approved.
 - Repository: `japan-rulewatch-mcp-public` on branch `main`.
-- Implementation commit: `70e685f feat: add paid Iya soba entry pack`.
-- Mainnet template and runbook added; placeholders prevent accidental deployment.
+- Previous commit: `75be220`; this change prepares delivery before settlement.
+- Mainnet config contains confirmed D1 and recipient; paid tool gate prevents new sales.
 - Commercial legal desk review added; it is not a lawyer's opinion.
 - Free tool added: `search_entry_cases(region_id, activity, language)`.
 - Paid tool added: `get_entry_pack(pack_id, language)`.
-- Supported region: `jp-tokushima-miyoshi-iya`.
-- Supported activity: `food_culture_workshop`.
-- Supported language: `en`.
+- Supported: `jp-tokushima-miyoshi-iya` / `food_culture_workshop` / `en`.
 - Pack ID: `jp-tokushima-miyoshi-iya-soba`.
 - Content version: `2026-09-08.2`.
 - Canonical data: `data/IYA-EXPERIENCE-DATA.json`.
-- Free result includes scope, unknowns, assumed fictional plan, and operator disclosure.
-- Paid result returns the complete fixed JSON with source and contact references.
-- Paid result adds an explicit notice that `plan_facts` is fictional sample data.
-- Operator: private commercial service; not a government or municipal service.
-- Official links do not imply affiliation or endorsement.
+- Free discovery and paid result disclose the fictional sample and private operator.
+- Operator: private service; official links imply no government affiliation or endorsement.
 - Approved provisional sale price: 5 USDC per single purchase.
 - Test price: 0.01 USDC on Base Sepolia, configured separately.
 - Saved-result retrieval window: seven days from the existing x402 Starter.
@@ -25,19 +20,21 @@
 - Future content versions and indefinite storage are not included.
 - Existing x402 verify, settle, ledger, saved result, and replay logic is reused.
 - Unknown pack IDs and unsupported languages stop before payment.
-- Confirmed: TypeScript check passes.
-- Confirmed: 21 local tests pass, including mock payment and replay controls.
+- Confirmed: TypeScript and 27 tests pass; saved replay works with facilitator offline.
+- Delivery is persisted before settlement using existing result_json; no migration required.
+- Recorded settlement permits prepared-result replay after receipt-write failure.
+- Unconfirmed settlement/missing data requires support; no automatic refund.
 - Safety boundary: no customer-specific legal conclusion or generated legal text.
-- Cloudflare login restored on 2026-09-08.
 - Mainnet D1 created in APAC: `b225aca0-3ac1-4fef-9968-d2275f84cf2b`.
 - Mainnet recipient confirmed: `0x5dc8c4a19ffd5dee720c3321a307d2a948d55656`.
 - Commercial scope confirmed: businesses and authorized business AI agents only; no household consumer sales.
-- B2B terms draft added with unfilled operator identity, support, remedy, law/forum, and tax decisions.
+- Operator identity/contact in B2B draft; public repository publication explicitly approved.
 - Free `get_commercial_terms` added; Mainnet paid delivery is fail-closed until its status is `ready`.
 - Migration `0001_purchases.sql` applied to Mainnet D1 on 2026-09-08.
 - Remote schema confirmed: `purchases`, expiry index, and migration table.
 - Mainnet dry-run confirmed 5 USDC, Base USDC, CDP facilitator, and dedicated D1.
-- Latest verification: TypeScript and all 21 tests pass.
+- Shared purchase fields now drive the commercial profile; pending fields block readiness.
+- Full terms snapshot/hash binding and live CDP verification remain unimplemented/unverified.
 - Not performed: Mainnet Worker deployment, real payment, or external communication.
-- Legal blockers: operator details, delivery-failure remedy, law/forum, tax treatment, counsel confirmation.
+- Pending: support target, remedy, law/forum, tax treatment, counsel confirmation.
 - Remaining gates: operator terms, qualified legal/tax review, Mainnet deployment approval, real-payment approval.

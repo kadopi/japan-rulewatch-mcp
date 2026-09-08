@@ -22,12 +22,12 @@ export async function getPurchase(db: D1Database, fingerprint: string): Promise<
   return db.prepare("SELECT * FROM purchases WHERE payment_fingerprint = ?").bind(fingerprint).first<Purchase>();
 }
 
-export async function claimPurchase(db: D1Database, purchase: Omit<Purchase, "status" | "transaction_ref" | "result_json" | "error_code">): Promise<{ created: boolean; purchase: Purchase }> {
+export async function claimPurchase(db: D1Database, purchase: Omit<Purchase, "status" | "transaction_ref" | "result_json" | "error_code">, preparedResult: string): Promise<{ created: boolean; purchase: Purchase }> {
   await db.prepare(`INSERT OR IGNORE INTO purchases
-    (purchase_id, payment_fingerprint, payer, tool_name, input_hash, network, asset, amount, status, created_at, updated_at, expires_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'settling', ?, ?, ?)`)
+    (purchase_id, payment_fingerprint, payer, tool_name, input_hash, network, asset, amount, status, created_at, updated_at, expires_at, result_json)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'settling', ?, ?, ?, ?)`)
     .bind(purchase.purchase_id, purchase.payment_fingerprint, purchase.payer, purchase.tool_name, purchase.input_hash,
-      purchase.network, purchase.asset, purchase.amount, purchase.created_at, purchase.updated_at, purchase.expires_at).run();
+      purchase.network, purchase.asset, purchase.amount, purchase.created_at, purchase.updated_at, purchase.expires_at, preparedResult).run();
   const saved = await getPurchase(db, purchase.payment_fingerprint);
   if (!saved) throw new Error("purchase_persistence_failed");
   return { created: saved.purchase_id === purchase.purchase_id, purchase: saved };

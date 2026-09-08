@@ -25,23 +25,24 @@ Future versions and indefinite storage are not included.
 ## 3. Price and payment
 
 Price: 5 USDC for one pack purchase, paid on Base Mainnet through x402.
-The buyer bears its own network and wallet costs. Any taxes, duties, or similar
-charges that apply to the buyer are the buyer's responsibility.
+Network/wallet cost allocation and seller tax treatment: `[OPERATOR TO CONFIRM]`.
 
 ## 4. Delivery failure and refund policy
 
-Recommended default: no refund after successful delivery of the paid pack. If
-delivery cannot be recovered with the same proof within the seven-day retrieval
-period, Japan Rule will investigate through its support channel and decide the
-available remedy under applicable law. Do not promise an automatic on-chain
-refund unless a separate refund process and receiving-wallet verification exist.
+Refund policy: `[OPERATOR TO CONFIRM]`.
+Current technical behavior: delivery is prepared and persisted before settlement.
+Saved results can be retrieved with the same proof after settlement is recorded,
+including when the final receipt/result update failed but the transaction was saved.
+Unconfirmed settlement or missing saved delivery requires support with the purchase ID and transaction reference;
+do not pay again or send raw payment proofs to support. A seven-day waiting
+period is not required. Support remedy and response target remain unconfirmed.
 
 ## 5. Operator and support
 
-- Legal seller name: `[OPERATOR TO CONFIRM]`
-- Business address: `[OPERATOR TO CONFIRM]`
-- Responsible person: `[OPERATOR TO CONFIRM]`
-- Support email: `[OPERATOR TO CONFIRM]`
+- Seller name supplied by operator: ぬこファクトリー
+- Business address: 〒790-0012 愛媛県松山市湊町４丁目５－６プログレッソ松山
+- Responsible person: 門屋哲朗
+- Support email: kadoya@nuko-factory.com
 - Support response target: `[OPERATOR TO CONFIRM, recommended: 5 business days]`
 
 ## 6. Governing terms
@@ -59,7 +60,7 @@ operator approval.
 
 ## Decisions required from the operator
 
-1. Seller legal name, address, responsible person, and support email.
+1. Confirm contracting seller identity (trade name/person/entity) and approve publication of the supplied details.
 2. Whether the recommended delivery-failure remedy is accepted.
 3. Support response target.
 4. Governing law and forum after legal advice.

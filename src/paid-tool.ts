@@ -2,6 +2,8 @@ import { paymentConfig } from "./config";
 import { claimPurchase, getPurchase, saveDeliveryFailure, saveSettled, type Purchase } from "./ledger";
 import { PAID_RESULT_TTL_DAYS } from "./product-terms";
 
+const DELIVERY_FAILURE_MESSAGE = "Payment settled but delivery failed. Contact operator support with the purchase ID and transaction reference. Automatic recovery is unavailable; do not create a new payment or send payment proofs to support.";
+
 type ResourceServer = {
   buildPaymentRequirements(input: unknown): Promise<unknown>;
   findMatchingRequirements(requirements: unknown, payload: unknown): unknown;
@@ -21,15 +23,16 @@ export interface PaidToolOptions<TArgs extends Record<string, unknown>> {
 
 export function createPaidToolHandler<TArgs extends Record<string, unknown>>(options: PaidToolOptions<TArgs>) {
   return async (args: TArgs, extra: any) => {
+    const token = extra?.mcpReq?._meta?.["x402/payment"] ?? extra?._meta?.["x402/payment"] ?? extra?.requestInfo?.headers?.["PAYMENT-SIGNATURE"];
+    const fingerprint = typeof token === "string" ? await sha256(token) : "";
+    const inputHash = await sha256(canonicalJson(args));
+    if (typeof token === "string") {
+      const existing = await getPurchase(options.env.DB, fingerprint);
+      if (existing) return existingPurchaseResponse(existing, inputHash, options.toolName, options.config);
+    }
     await options.initialize();
     const requirements = await options.resourceServer.buildPaymentRequirements({ scheme: "exact", payTo: options.config.recipient, price: options.config.priceUsd, network: options.config.network, maxTimeoutSeconds: 300 });
-    const token = extra?.mcpReq?._meta?.["x402/payment"] ?? extra?._meta?.["x402/payment"] ?? extra?.requestInfo?.headers?.["PAYMENT-SIGNATURE"];
     if (typeof token !== "string") return paymentRequired(requirements, options.resource);
-
-    const fingerprint = await sha256(token);
-    const inputHash = await sha256(canonicalJson(args));
-    const existing = await getPurchase(options.env.DB, fingerprint);
-    if (existing) return existingPurchaseResponse(existing, inputHash, options.toolName, options.config);
 
     let payload: unknown;
     try { payload = JSON.parse(atob(token)); } catch { return paymentRequired(requirements, options.resource, "INVALID_PAYMENT"); }
@@ -39,13 +42,20 @@ export function createPaidToolHandler<TArgs extends Record<string, unknown>>(opt
     try { verification = await options.resourceServer.verifyPayment(payload, matching); } catch { return paymentRequired(requirements, options.resource, "INVALID_PAYMENT"); }
     if (!verification.isValid) return paymentRequired(requirements, options.resource, verification.invalidReason ?? "INVALID_PAYMENT");
 
+    let preparedResult: string;
+    try {
+      preparedResult = JSON.stringify(await options.execute(args));
+    } catch {
+      return error("delivery_preparation_failed", "Could not prepare delivery. No settlement was attempted.", { paymentRequired: false });
+    }
     const now = new Date();
     const claimed = await claimPurchase(options.env.DB, {
       purchase_id: crypto.randomUUID(), payment_fingerprint: fingerprint, payer: verification.payer ?? null,
       tool_name: options.toolName, input_hash: inputHash, network: options.config.network, asset: options.config.asset, amount: options.config.amount,
       created_at: now.toISOString(), updated_at: now.toISOString(), expires_at: new Date(now.getTime() + PAID_RESULT_TTL_DAYS * 86_400_000).toISOString(),
-    });
+    }, preparedResult);
     if (!claimed.created) return existingPurchaseResponse(claimed.purchase, inputHash, options.toolName, options.config);
+    if (claimed.purchase.result_json !== preparedResult) return error("delivery_preparation_failed", "Prepared delivery was not persisted. No settlement was attempted.", { paymentRequired: false });
 
     let settlement;
     try { settlement = await options.resourceServer.settlePayment(payload, matching); } catch { return pendingReceipt(claimed.purchase.purchase_id); }
@@ -53,12 +63,16 @@ export function createPaidToolHandler<TArgs extends Record<string, unknown>>(opt
 
     const receipt = { purchaseId: claimed.purchase.purchase_id, status: "settled", transaction: settlement.transaction, network: settlement.network, payer: settlement.payer };
     try {
-      const body = { ...await options.execute(args), receipt };
+      const body = { ...JSON.parse(preparedResult), receipt };
       await saveSettled(options.env.DB, fingerprint, String(settlement.transaction ?? ""), body);
       return result(body, { "x402/payment-response": receipt });
     } catch {
-      await saveDeliveryFailure(options.env.DB, fingerprint, String(settlement.transaction ?? ""), "tool_execution_or_persistence_failed");
-      return error("delivery_failed", "Payment settled, but the result could not be saved. Retry the same payment proof; do not create a new payment.", receipt);
+      try {
+        await saveDeliveryFailure(options.env.DB, fingerprint, String(settlement.transaction ?? ""), "receipt_persistence_failed");
+      } catch {
+        return error("payment_confirmation_pending", "Payment settled but its receipt could not be persisted. Contact support with this receipt; do not pay again.", { ...receipt, next_action: "contact_support", paymentRequired: false });
+      }
+      return result({ ...JSON.parse(preparedResult), receipt }, { "x402/payment-response": receipt });
     }
   };
 }
@@ -67,7 +81,10 @@ export function existingPurchaseResponse(purchase: Purchase, inputHash: string, 
   if (purchase.input_hash !== inputHash || purchase.tool_name !== toolName || purchase.network !== config.network || purchase.asset.toLowerCase() !== config.asset.toLowerCase() || purchase.amount !== config.amount) return error("payment_reuse_rejected", "This payment proof belongs to a different tool call or price.");
   if (new Date(purchase.expires_at).getTime() <= Date.now()) return error("purchase_expired", "The saved result has expired. Do not reuse this payment proof.");
   if (purchase.status === "settled" && purchase.result_json) return result(JSON.parse(purchase.result_json));
-  if (purchase.status === "delivery_failed") return error("delivery_failed", "Payment was settled but delivery failed. Use the same proof when retrying.", { purchaseId: purchase.purchase_id, transaction: purchase.transaction_ref });
+  if (purchase.status === "delivery_failed" && purchase.result_json && purchase.transaction_ref) {
+    return result({ ...JSON.parse(purchase.result_json), receipt: { purchaseId: purchase.purchase_id, status: "settled", transaction: purchase.transaction_ref, network: purchase.network, payer: purchase.payer } });
+  }
+  if (purchase.status === "delivery_failed") return error("delivery_failed", DELIVERY_FAILURE_MESSAGE, { purchaseId: purchase.purchase_id, transaction: purchase.transaction_ref, next_action: "contact_support", paymentRequired: false });
   return pendingReceipt(purchase.purchase_id);
 }
 

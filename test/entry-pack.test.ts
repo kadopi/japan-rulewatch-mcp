@@ -20,7 +20,7 @@ const config = paymentConfig({
   X402_FACILITATOR_URL: "https://x402.org/facilitator"
 } as Env);
 
-function fakeDb() {
+function fakeDb(failReceipt = false, failPreparation = false) {
   let purchase: Purchase | null = null;
   return {
     prepare(sql: string) {
@@ -32,6 +32,7 @@ function fakeDb() {
             },
             async run() {
               if (sql.startsWith("INSERT") && !purchase) {
+                if (failPreparation) throw new Error("storage unavailable");
                 purchase = {
                   purchase_id: String(values[0]),
                   payment_fingerprint: String(values[1]),
@@ -43,17 +44,21 @@ function fakeDb() {
                   amount: String(values[7]),
                   status: "settling",
                   transaction_ref: null,
-                  result_json: null,
+                  result_json: String(values[11]),
                   error_code: null,
                   created_at: String(values[8]),
                   updated_at: String(values[9]),
                   expires_at: String(values[10])
                 };
               } else if (sql.startsWith("UPDATE purchases SET status = 'settled'") && purchase) {
+                if (failReceipt) throw new Error("receipt write failed");
                 purchase.status = "settled";
                 purchase.transaction_ref = String(values[0]);
                 purchase.result_json = String(values[1]);
                 purchase.updated_at = String(values[2]);
+              } else if (sql.startsWith("UPDATE purchases SET status = 'delivery_failed'") && purchase) {
+                purchase.status = "delivery_failed";
+                purchase.transaction_ref = String(values[0]);
               }
               return { success: true };
             }
@@ -72,6 +77,7 @@ describe("Iya entry-case catalog", () => {
       status: "operator_details_pending"
     });
     expect(commercialTermsReady()).toBe(false);
+    expect(commercialTermsReady({ ...commercialTermsFor(ENTRY_PACK_ID)!, status: "ready" })).toBe(false);
   });
 
   it("finds the single supported case and discloses scope before purchase", () => {
@@ -119,13 +125,45 @@ describe("Iya entry-case catalog", () => {
 });
 
 describe("Iya entry-pack x402 adapter", () => {
+  it.each(["receipt_failure", "storage_failure", "generation_failure", "unknown_settlement"])("handles %s without charging twice or leaking unconfirmed delivery", async (mode) => {
+    let settlements = 0;
+    let executions = 0;
+    const handler = createPaidToolHandler<EntryPackInput>({
+      toolName: "get_entry_pack", resource: { url: "x402://get_entry_pack", description: "test" },
+      env: { DB: fakeDb(mode === "receipt_failure", mode === "storage_failure") } as Env,
+      config, initialize: async () => {},
+      resourceServer: {
+        buildPaymentRequirements: async () => [], findMatchingRequirements: () => ({}),
+        verifyPayment: async () => ({ isValid: true }),
+        settlePayment: async () => { settlements++; if (mode === "unknown_settlement") throw new Error("timeout"); return { success: true, transaction: "tx" }; }
+      },
+      execute: () => { executions++; if (mode === "generation_failure") throw new Error("generation failed"); return { private_delivery: "original" }; }
+    });
+    const input = { pack_id: ENTRY_PACK_ID, language: "en" };
+    const extra = { _meta: { "x402/payment": btoa("{}") } };
+    if (mode === "storage_failure") {
+      await expect(handler(input, extra)).rejects.toThrow("storage unavailable");
+      expect(settlements).toBe(0);
+      return;
+    }
+    const first = await handler(input, extra);
+    if (mode === "generation_failure") { expect(settlements).toBe(0); expect(JSON.stringify(first)).not.toContain("private_delivery"); return; }
+    const replay = await handler(input, extra);
+    expect(settlements).toBe(1);
+    expect(executions).toBe(1);
+    for (const response of [first, replay]) {
+      if (mode === "receipt_failure") expect(JSON.parse(response.content[0]!.text)).toMatchObject({ private_delivery: "original", receipt: { transaction: "tx" } });
+      else expect(JSON.stringify(response)).not.toContain("private_delivery");
+    }
+  });
   it("requires payment, delivers after a mock payment, replays the saved version, and rejects changed input", async () => {
+    let facilitatorUnavailable = false;
     const handler = createPaidToolHandler<EntryPackInput>({
       toolName: "get_entry_pack",
       resource: { url: "x402://get_entry_pack", description: "Fixed Iya entry pack" },
       env: { DB: fakeDb() } as Env,
       config,
-      initialize: async () => {},
+      initialize: async () => { if (facilitatorUnavailable) throw new Error("facilitator offline"); },
       resourceServer: {
         buildPaymentRequirements: async () => [{ test: true }],
         findMatchingRequirements: () => ({ test: true }),
@@ -144,6 +182,7 @@ describe("Iya entry-pack x402 adapter", () => {
     const paid = await handler(input, { _meta: { "x402/payment": proof } });
     expect(JSON.parse(paid.content[0]!.text)).toMatchObject({ pack_id: ENTRY_PACK_ID, content_version: "2026-09-08.2" });
 
+    facilitatorUnavailable = true;
     const replay = await handler(input, { _meta: { "x402/payment": proof } });
     expect(JSON.parse(replay.content[0]!.text)).toMatchObject({ pack_id: ENTRY_PACK_ID, content_version: "2026-09-08.2" });
 

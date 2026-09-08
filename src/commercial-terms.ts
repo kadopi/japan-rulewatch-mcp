@@ -1,5 +1,5 @@
 import { ENTRY_PACK_ID } from "./entry-pack";
-import { ENTRY_PACK_SALE_PRICE_USDC, PAID_RESULT_TTL_DAYS } from "./product-terms";
+import { ENTRY_PACK_PURCHASE_TERMS as purchaseTerms } from "./product-terms";
 
 type CommercialTermsStatus = "ready" | "operator_details_pending";
 
@@ -11,7 +11,7 @@ type CommercialTerms = {
   consumer_sales_permitted: boolean;
   price: { amount_usdc: number; network: string; purchase_type: string };
   delivery: { timing: string; saved_result_days: number; future_versions_included: boolean };
-  delivery_failure: { same_proof_retry_days: number; remedy: string };
+  delivery_failure: { automatic_recovery: boolean; remedy: string };
   operator_details: string;
   support_channel: string;
   governing_law_and_forum: string;
@@ -20,19 +20,19 @@ type CommercialTerms = {
 
 export const ENTRY_PACK_COMMERCIAL_TERMS: CommercialTerms = {
   product_id: ENTRY_PACK_ID,
-  terms_version: "2026-09-08-b2b-draft-1",
+  terms_version: purchaseTerms.commercial_terms_version,
   status: "operator_details_pending",
-  purchaser_scope: "businesses and AI agents acting for an authorized business principal only",
-  consumer_sales_permitted: false,
-  price: { amount_usdc: ENTRY_PACK_SALE_PRICE_USDC, network: "Base Mainnet", purchase_type: "single_purchase" },
+  purchaser_scope: purchaseTerms.purchaser_scope,
+  consumer_sales_permitted: purchaseTerms.consumer_sales_permitted,
+  price: { amount_usdc: purchaseTerms.sale_price_usdc, network: "Base Mainnet", purchase_type: purchaseTerms.purchase_type },
   delivery: {
     timing: "immediate after successful x402 settlement",
-    saved_result_days: PAID_RESULT_TTL_DAYS,
-    future_versions_included: false
+    saved_result_days: purchaseTerms.saved_result_days,
+    future_versions_included: purchaseTerms.future_versions_included
   },
   delivery_failure: {
-    same_proof_retry_days: PAID_RESULT_TTL_DAYS,
-    remedy: "operator support review required; no automatic on-chain refund"
+    automatic_recovery: false,
+    remedy: "prepared delivery can be retrieved after settlement is recorded; unconfirmed settlement or missing delivery requires operator support; no automatic on-chain refund"
   },
   operator_details: "pending",
   support_channel: "pending",
@@ -44,6 +44,8 @@ export function commercialTermsFor(productId: string) {
   return productId === ENTRY_PACK_ID ? ENTRY_PACK_COMMERCIAL_TERMS : null;
 }
 
-export function commercialTermsReady() {
-  return ENTRY_PACK_COMMERCIAL_TERMS.status === "ready";
+export function commercialTermsReady(terms: CommercialTerms = ENTRY_PACK_COMMERCIAL_TERMS) {
+  const confirmed = (value: string) => value.trim().length > 0 && !/pending|\[OPERATOR/i.test(value);
+  return terms.status === "ready" && [terms.operator_details, terms.support_channel,
+    terms.governing_law_and_forum, terms.delivery_failure.remedy].every(confirmed);
 }

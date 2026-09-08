@@ -47,6 +47,11 @@ describe("tourism payment configuration", () => {
 });
 
 describe("tourism evidence purchase replay", () => {
+  it("routes settled delivery failures to support without requesting another payment", () => {
+    const response = existingPurchaseResponse({ ...purchase, status: "delivery_failed", result_json: null }, "input-a", "get_tourism_evidence_pack", config);
+    expect(response.structuredContent).toMatchObject({ error: "delivery_failed", next_action: "contact_support", paymentRequired: false, purchaseId: purchase.purchase_id });
+    expect(JSON.stringify(response)).toContain("Automatic recovery is unavailable");
+  });
   it("returns the saved evidence pack for the same proof and input", () =>
     expect(existingPurchaseResponse(purchase, "input-a", "get_tourism_evidence_pack", config).structuredContent).toMatchObject({ status: "ready" }));
   it("rejects a proof reused for different input", () =>
