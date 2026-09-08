@@ -8,6 +8,7 @@
 - Both CDP secret names verified after 1Password-to-stdin registration; no plaintext secret files.
 - Last live check: unpaid entry purchase returns PURCHASE_CONFIRMATION_REQUIRED/paymentRequired:false plus current terms snapshot/hash and five required buyer fields.
 - Local authenticated CDP GET /supported: HTTP 200, Base x402 v2 exact. Worker-side CDP request/settlement untested.
+- Live no-payment preflight after sale activation: confirmation-complete input returns PAYMENT_REQUIRED for exact Base Mainnet USDC 5000000 (5 USDC); no signature/payment sent.
 - Confirmed this turn: TypeScript, 30 tests, git diff --check pass.
 - Product: jp-tokushima-miyoshi-iya-soba, en, content 2026-09-08.2.
 - Canonical data: data/IYA-EXPERIENCE-DATA.json; fictional sample/private operator notices retained.

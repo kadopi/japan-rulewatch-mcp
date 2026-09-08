@@ -1,6 +1,6 @@
 # Mainnet release runbook
 
-Status: Mainnet Worker deployed with sales closed on 2026-09-08 under explicit approval. Nothing in this file authorizes sales activation or a real payment.
+Status: Mainnet Worker deployed and sale gate opened on 2026-09-08 under explicit approval. Nothing in this file authorizes a real payment.
 
 ## CDP authentication setup
 
@@ -13,26 +13,26 @@ Status: Mainnet Worker deployed with sales closed on 2026-09-08 under explicit a
 - After key setup, verify only GET `/supported` and Base Mainnet `exact` support first; this does not prove settlement works.
 - Local check: `npm run check:cdp -- <1Password-item-id>`, with fields labeled `API key ID` and `Secret`. The script reads through the authenticated 1Password CLI into process memory and prints only sanitized status, never credentials or JWTs.
 - Verified 2026-09-08: local HTTP 200 and Base Mainnet x402 v2 `exact` support. Both Worker secret names verified after registration from 1Password through stdin without plaintext files. Deployed-Worker CDP authentication and settlement remain untested.
-- Live endpoint: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp . Health passes; `get_entry_pack` returns `COMMERCIAL_TERMS_NOT_READY` with `paymentRequired: false`. Sales remain closed.
+- Live endpoint: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp . Health passes; an unpaid first call returns `PURCHASE_CONFIRMATION_REQUIRED` with the current terms snapshot/hash. A confirmation-complete call, without a payment signature, returns `PAYMENT_REQUIRED` for exactly 5 USDC on Base Mainnet. No payment was made during this check.
 - Official instructions: https://docs.cdp.coinbase.com/api-reference/v2/authentication
 
-## Release sequence
+## Current real-payment test sequence
 
-1. Review the source-informed commercial terms and resolve concrete disclosure/input gaps. Paid professional sign-off is not a blanket requirement.
-2. Use the operator-confirmed Base Mainnet USDC recipient
+1. Terra preflight is complete: source-informed terms, buyer confirmation gate,
+   31 tests, Mainnet dry-run, and live unpaid 5-USDC requirement check passed.
+2. Astra reviews the current recipient, terms snapshot/hash, and test input
+   immediately before payment.
+3. Use the operator-confirmed Base Mainnet USDC recipient
    `0x5dc8c4a19ffd5dee720c3321a307d2a948d55656`.
-3. Re-authenticate Wrangler without pasting credentials into source or chat.
 4. Use dedicated D1 `japan-rulewatch-purchases-mainnet`
    (`b225aca0-3ac1-4fef-9968-d2275f84cf2b`).
-5. Copy `wrangler.mainnet.example.jsonc` to ignored `wrangler.mainnet.local.jsonc`.
-6. Confirm the checked-in recipient still matches the intended receiving wallet.
-7. Apply `migrations/0001_purchases.sql` to that Mainnet D1 database.
-8. Run `npm run check`, `npm test`, `git diff --check`, and a secret scan.
-9. Run `wrangler deploy --dry-run --config <local-mainnet-config>`.
-10. Obtain explicit approval for the named Mainnet Worker deployment.
-11. Deploy, then confirm the free search and unpaid 5-USDC payment requirement.
-12. Obtain separate approval for one real 5-USDC purchase test.
-13. Reconcile the tool receipt, D1 settled record, transaction, and recipient balance.
+5. On the buyer's own wallet, review the exact 5-USDC Base payment request
+   after providing the current terms version/hash, business purchase confirmation,
+   business name, and ISO country code.
+6. Obtain separate approval for that one payment signature, then execute it.
+7. Immediately record the tool receipt, transaction hash, D1 settled record,
+   delivery result, and recipient balance. Confirm same-proof retrieval once;
+   do not create a second payment.
 
 Fixed Mainnet payment settings:
 
