@@ -1,7 +1,7 @@
 # Japan RuleWatch latest handoff
 
 - Current: Mainnet deployed with sales closed; commercial draft v4 and purchase-confirmation gate deployed 2026-09-08.
-- Repo: japan-rulewatch-mcp-public, main. Last commit: 50633ac feat: require purchase terms confirmation.
+- Repo: japan-rulewatch-mcp-public, main. Latest implementation commit: a0304ca feat: require purchase terms confirmation.
 - Git status after this handoff update should be clean and pushed to origin/main.
 - Live: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp
 - Initial deployment: 8dd72965-b140-4ebb-b849-87f09b6d0a4e (before secret update); current purchase-gate version: 4de5bfb1-dd82-4980-985e-90ad323dbd57.
