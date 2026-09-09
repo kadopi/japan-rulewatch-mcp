@@ -93,7 +93,7 @@ describe("Iya entry-case catalog", () => {
     }, false)).resolves.toBeNull();
   });
 
-  it("finds the single supported case and discloses scope before purchase", () => {
+  it("finds the single supported case and provides an execution-oriented free preview", () => {
     const result = searchEntryCases({
       region_id: "jp-tokushima-miyoshi-iya",
       activity: "food_culture_workshop",
@@ -101,14 +101,18 @@ describe("Iya entry-case catalog", () => {
     });
     expect(result.results).toHaveLength(1);
     expect(result.results[0]).toMatchObject({ pack_id: ENTRY_PACK_ID });
-    expect(result.results[0]?.missing_information).toContain("contracting_party");
-    expect(result.results[0]?.purchase_terms).toMatchObject({
-      purchaser_scope: "businesses and AI agents acting for an authorized business principal only",
-      consumer_sales_permitted: false,
-      sale_price_usdc: 5,
-      saved_result_days: 7,
-      future_versions_included: false
+    expect(result.results[0]?.preview).toMatchObject({
+      model_case: { participants: 6, transport_arranged: false, lodging_arranged: false },
+      delivery_preview: expect.stringContaining("official-source locations")
     });
+    expect(result.results[0]?.preview.decision_preview).toHaveLength(3);
+    expect(result.results[0]?.next_action).toContain("get_commercial_terms");
+    expect(result.results[0]).not.toHaveProperty("purchase_terms");
+    expect(result.results[0]).not.toHaveProperty("sources");
+    expect(result.results[0]).not.toHaveProperty("contacts");
+    expect(result.results[0]).not.toHaveProperty("checks");
+    expect(result.results[0]).not.toHaveProperty("consultation_brief_en");
+    expect(result.results[0]).not.toHaveProperty("next_actions");
     expect(result.operator_disclosure).toContain("privately operated commercial");
   });
 

@@ -95,7 +95,7 @@ function createServer(env: Env) {
     "search_entry_cases",
     {
       description:
-        "Free: search the fixed Japan tourism entry-case catalog by region, activity, and language. Returns scope and unknowns before purchase. Japan Rule is a private commercial service, not a government service.",
+        "Free: search the fixed Japan tourism entry-case catalog by region, activity, and language. Returns a model-case preview, key decision themes and what the paid preparation pack adds. It does not include source locations, contact routes, inquiry text or an action plan. Japan Rule is a private commercial service, not a government service.",
       inputSchema: {
         region_id: z.string().trim().min(1).max(100),
         activity: z.string().trim().min(1).max(100),

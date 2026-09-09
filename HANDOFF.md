@@ -1,6 +1,8 @@
 # Japan RuleWatch latest handoff
 
 - Current: Mainnet sale gate opened 2026-09-08; commercial draft v4 and purchase-confirmation gate are deployed. One operator-authorized 5-USDC Mainnet purchase settled successfully. Public README, MCP manifest, and Smithery listing point to the verified Mainnet endpoint and describe the free and paid paths.
+- Current local change: free `search_entry_cases` is now an execution-oriented preview: model case, three decision themes, and an explicit paid-delivery preview. It intentionally omits source locations, contact routes, inquiry text and the action plan, which remain paid.
+- Validation pending: run the existing unit suite and type check after this local boundary update. No deployment, directory update, external outreach, or payment is included.
 - Repo: japan-rulewatch-mcp-public, main. Latest local commit before this guide update: 1151b2d test: verify public buyer flow.
 - Git status: sales guide is committed and pushed. Smithery listing points to the Mainnet endpoint; its public description now distinguishes free official-rule search/tourism preflight from the paid B2B entry-preparation pack.
 - Live: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp

@@ -38,17 +38,24 @@ export function searchEntryCases(input: EntryCaseSearchInput) {
           title: item.title_ja,
           summary: item.summary_en,
           pack_id: entryPack.pack_id,
-          assumed_plan: {
-            participants: entryPack.plan_facts.participants,
-            venue: entryPack.plan_facts.venue,
-            transport_arranged: entryPack.plan_facts.transport_arranged,
-            lodging_arranged: entryPack.plan_facts.lodging_arranged
+          preview: {
+            model_case: {
+              participants: entryPack.plan_facts.participants,
+              venue: entryPack.plan_facts.venue,
+              transport_arranged: entryPack.plan_facts.transport_arranged,
+              lodging_arranged: entryPack.plan_facts.lodging_arranged
+            },
+            decision_preview: [
+              "Confirm the provider's acceptance of the proposed group, resale and operating roles.",
+              "Clarify who contracts with guests, takes payment and is responsible for food handling.",
+              "Confirm language support and any venue-specific operating conditions."
+            ],
+            delivery_preview:
+              "The paid preparation pack adds official-source locations, published contact routes, ready-to-send inquiry text and a prioritized action plan."
           },
-          information_scope: entryPack.completion_scope,
-          missing_information: entryPack.missing_information,
-          coverage_gaps: entryPack.coverage_gaps,
-          scenario_type: entryPack.scenario_type,
-          purchase_terms: ENTRY_PACK_PURCHASE_TERMS,
+          information_scope:
+            "Free model-case preview only. It does not include source locations, contact routes, inquiry text or an action plan.",
+          next_action: "Read get_commercial_terms before requesting the paid preparation pack.",
           operator_disclosure: PRIVATE_OPERATOR_NOTICE
         }))
       : [],
