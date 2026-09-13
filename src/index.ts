@@ -59,6 +59,31 @@ const DISCOVERY = {
   }
 } as const;
 
+const AGENT_CARD = {
+  name: "Japan RuleWatch",
+  description: "Read-only MCP guidance for authorized business agents assessing Japan experiential-tourism market entry or researching official Japanese ecommerce sources.",
+  version: VERSION,
+  serviceType: "mcp-service-card",
+  mcpEndpoint: MAINNET_MCP_URL,
+  transport: "streamable-http",
+  skills: [{
+    id: "japan-tourism-market-entry",
+    name: "Japan tourism market-entry guidance",
+    tags: ["japan-tourism", "tour-operator", "official-sources", "market-entry", "ecommerce", "x402"],
+    examples: [
+      "I am an AI agent helping a tour operator assess entry into Japan's experiential-tourism market. Start with the Iya food-culture workshop model case.",
+      "Find official Japanese sources for a business agent researching return-policy and mail-order advertising requirements before a market-entry decision."
+    ],
+    firstTool: "search_entry_cases"
+  }],
+  limitations: [
+    "Informational evidence only; not legal advice or a compliance decision.",
+    "The paid Iya model-case pack is not a booking, permit application, or launch guarantee.",
+    "Use get_commercial_terms before any x402 purchase to obtain current terms and payment requirements."
+  ],
+  a2a: { supported: false, note: "This card describes an MCP service. A2A conversation is provided by Aegis Sales Bot, not Japan RuleWatch." }
+} as const;
+
 function textResult(value: unknown) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(value, null, 2) }]
@@ -302,6 +327,10 @@ export default {
 
     if (url.pathname === "/.well-known/glama.json" && request.method === "GET") {
       return Response.json(GLAMA_CONNECTOR_CLAIM);
+    }
+
+    if (url.pathname === "/.well-known/agent-card.json" && request.method === "GET") {
+      return Response.json(AGENT_CARD);
     }
 
     if (url.pathname === "/mcp") {
