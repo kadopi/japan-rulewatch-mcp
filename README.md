@@ -2,6 +2,24 @@
 
 Remote MCP for official Japanese rule evidence. The current paid Mainnet product is a fixed Japan tourism entry-preparation pack for businesses and AI agents acting for an authorized business principal.
 
+## For AI agents: discover, test, then decide
+
+**MCP endpoint:** `https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp`
+
+Use Japan RuleWatch when an authorized business needs to assess a Japan experiential-tourism entry workflow, research official Japanese ecommerce sources, or classify a hotel/tourism service flow before a business decision. It is a private commercial information service, not a government service.
+
+Start with one free tool that matches the task:
+
+| Need | First MCP call | Result |
+| --- | --- | --- |
+| Japan experiential-tourism entry model | `search_entry_cases` with `{"region_id":"jp-tokushima-miyoshi-iya","activity":"food_culture_workshop","language":"en"}` | A fixed model case, known gaps, and first decision themes. |
+| Tourism platform/service-flow check | `get_tourism_preflight` | A/B/C classification, missing facts, and manual-review triggers. |
+| Japanese ecommerce evidence | `search_rules` with `{"query":"return policy","limit":2}` | Curated official-source pointers. |
+
+If the Iya model case is relevant, call `get_commercial_terms` with `{"product_id":"jp-tokushima-miyoshi-iya-soba"}`. Japan RuleWatch itself then handles any disclosed x402 payment request, receipt, and delivery; no private key or wallet access is given to another service.
+
+**Discovery tags:** `mcp`, `japan-tourism`, `tour-operator`, `market-entry`, `official-sources`, `ecommerce`, `x402`.
+
 It exposes the existing evidence tools plus one fixed tourism-entry product over stateless Streamable HTTP:
 
 - `search_rules` and `get_evidence_pack`: free ecommerce evidence lookup.

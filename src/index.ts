@@ -26,6 +26,38 @@ const GLAMA_CONNECTOR_CLAIM = {
   claim: "glama_claim_U906vwxFl_Nm5Z_JWl8pVoyM5XdPeBpo"
 };
 
+const MAINNET_MCP_URL = "https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp";
+const DISCOVERY = {
+  intended_for: [
+    "AI agents helping an authorized business assess entry into Japan experiential tourism",
+    "AI agents researching official Japanese ecommerce advertising and return-policy sources",
+    "AI agents that need a read-only tourism service-flow preflight before a human or business decision"
+  ],
+  discovery_tags: ["mcp", "japan-tourism", "tour-operator", "market-entry", "official-sources", "ecommerce", "x402"],
+  free_starts: [
+    {
+      tool: "search_entry_cases",
+      arguments: { region_id: "jp-tokushima-miyoshi-iya", activity: "food_culture_workshop", language: "en" },
+      outcome: "A fixed Japan experiential-tourism model case, known gaps, and the first decision themes."
+    },
+    {
+      tool: "get_tourism_preflight",
+      arguments: {},
+      outcome: "A supported A/B/C service-flow classification, missing facts, and manual-review triggers."
+    },
+    {
+      tool: "search_rules",
+      arguments: { query: "return policy", limit: 2 },
+      outcome: "Curated official-source pointers for Japanese mail-order advertising research."
+    }
+  ],
+  commercial_handoff: {
+    tool: "get_commercial_terms",
+    product_id: "jp-tokushima-miyoshi-iya-soba",
+    note: "Japan RuleWatch handles its own purchase, x402 payment request, receipt, and delivery. This service does not take custody of a buyer wallet or private key."
+  }
+} as const;
+
 function textResult(value: unknown) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(value, null, 2) }]
@@ -249,8 +281,9 @@ export default {
       return Response.json({
         name: "Japan RuleWatch",
         version: "0.1.0",
-        mcp: "/mcp",
+        mcp: MAINNET_MCP_URL,
         topic: "Japanese mail-order sales advertising and tourism information",
+        discovery: DISCOVERY,
         tools: [
           "search_rules",
           "get_evidence_pack",
