@@ -3,7 +3,7 @@
   "name": "io.github.kadopi/japan-rulewatch-mcp",
   "title": "Japan RuleWatch",
   "description": "Remote MCP for AI agents and businesses researching Japan experiential-tourism entry, tour-operator service flows, official Japanese ecommerce evidence, and an optional x402-paid Iya soba entry-preparation pack. Start free with search_entry_cases, get_tourism_preflight, or search_rules.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "url": "https://github.com/kadopi/japan-rulewatch-mcp",
     "source": "github"

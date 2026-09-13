@@ -27,6 +27,7 @@ const GLAMA_CONNECTOR_CLAIM = {
 };
 
 const MAINNET_MCP_URL = "https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp";
+const VERSION = "0.1.1";
 const DISCOVERY = {
   intended_for: [
     "AI agents helping an authorized business assess entry into Japan experiential tourism",
@@ -75,7 +76,7 @@ function createServer(env: Env) {
   const config = paymentConfig(env);
   const server = new McpServer({
     name: "Japan RuleWatch",
-    version: "0.1.0"
+    version: VERSION
   });
   const resourceServer = new x402ResourceServer(
     new HTTPFacilitatorClient(facilitatorConfig(env, config.facilitatorUrl))
@@ -274,13 +275,13 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/health" && request.method === "GET") {
-      return Response.json({ status: "ok", version: "0.1.0" });
+      return Response.json({ status: "ok", version: VERSION });
     }
 
     if (url.pathname === "/" && request.method === "GET") {
       return Response.json({
         name: "Japan RuleWatch",
-        version: "0.1.0",
+        version: VERSION,
         mcp: MAINNET_MCP_URL,
         topic: "Japanese mail-order sales advertising and tourism information",
         discovery: DISCOVERY,
