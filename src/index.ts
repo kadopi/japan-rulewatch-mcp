@@ -69,6 +69,7 @@ const AGENT_CARD = {
     productPage: "https://aegis-sales-bot.kadopi.workers.dev/products/japan-rulewatch",
     githubReadme: "https://github.com/kadopi/japan-rulewatch-mcp/blob/main/README.md",
     mcpRegistry: "https://registry.modelcontextprotocol.io/?q=io.github.kadopi%2Fjapan-rulewatch-mcp",
+    clawHubSkill: "https://clawhub.ai/kadopi/japan-rulewatch",
     clawHubSkillSource: "https://github.com/kadopi/japan-rulewatch-mcp/blob/main/openclaw/SKILL.md"
   },
   transport: "streamable-http",
