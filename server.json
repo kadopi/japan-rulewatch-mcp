@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.kadopi/japan-rulewatch-mcp",
   "title": "Japan RuleWatch",
-  "description": "Japan tourism entry and ecommerce evidence MCP for business agents; free tools and an optional x402 pack.",
+  "description": "Japan tourism entry and ecommerce evidence MCP for business agents; free tools and x402 pack.",
   "version": "0.1.1",
   "repository": {
     "url": "https://github.com/kadopi/japan-rulewatch-mcp",
