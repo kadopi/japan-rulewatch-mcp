@@ -65,6 +65,12 @@ const AGENT_CARD = {
   version: VERSION,
   serviceType: "mcp-service-card",
   mcpEndpoint: MAINNET_MCP_URL,
+  links: {
+    productPage: "https://aegis-sales-bot.kadopi.workers.dev/products/japan-rulewatch",
+    githubReadme: "https://github.com/kadopi/japan-rulewatch-mcp/blob/main/README.md",
+    mcpRegistry: "https://registry.modelcontextprotocol.io/?q=io.github.kadopi%2Fjapan-rulewatch-mcp",
+    clawHubSkillSource: "https://github.com/kadopi/japan-rulewatch-mcp/blob/main/openclaw/SKILL.md"
+  },
   transport: "streamable-http",
   skills: [{
     id: "japan-tourism-market-entry",

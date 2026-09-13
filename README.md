@@ -96,3 +96,12 @@ Endpoints:
 - Outputs are informational evidence, not legal advice
 
 Mainnet deployment and the first 5-USDC purchase have been verified. Future releases and payments remain separate operational decisions.
+
+## AI discovery links
+
+- MCP endpoint: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/mcp
+- MCP Service Card: https://japan-rulewatch-mcp-mainnet.kadopi.workers.dev/.well-known/agent-card.json
+- Aegis product page: https://aegis-sales-bot.kadopi.workers.dev/products/japan-rulewatch
+- GitHub README: https://github.com/kadopi/japan-rulewatch-mcp/blob/main/README.md
+- MCP Registry: https://registry.modelcontextprotocol.io/?q=io.github.kadopi%2Fjapan-rulewatch-mcp
+- ClawHub Skill source: [openclaw/SKILL.md](openclaw/SKILL.md) (publication is prepared)
